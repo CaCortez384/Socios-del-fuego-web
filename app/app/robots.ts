@@ -10,6 +10,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       disallow: '/private/',
     },
-    sitemap: 'https://sociosdelfuego.cl/sitemap.xml',
+    sitemap: 'https://socios-del-fuego.vercel.app/sitemap.xml',
   }
 }
