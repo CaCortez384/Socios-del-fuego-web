@@ -95,6 +95,7 @@ export default function RootLayout({
 
   return (
     <html lang="es" className="dark scroll-smooth">
+      <meta name="google-site-verification" content="NiSX12KwWb_hi1hTK-vk99i2PGqEw7CZs8cVyaFrtc8" />
       <body className={`${inter.variable} ${oswald.variable} antialiased bg-stone-950 text-stone-50`}>
         {/* Inyección del JSON-LD para Google */}
         <script
