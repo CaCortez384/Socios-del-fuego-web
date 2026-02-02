@@ -1,6 +1,8 @@
 import { MetadataRoute } from 'next'
 
-// CAMBIA ESTO POR TU DOMINIO REAL
+// ESTA LÍNEA ES LA SOLUCIÓN:
+export const dynamic = 'force-static'
+
 const BASE_URL = 'https://sociosdelfuego.cl' 
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -11,6 +13,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'weekly',
       priority: 1,
     },
-    // Si tuvieras más páginas, irían aquí
+    // Aquí puedes agregar tus rutas del blog si quieres, pero con esto basta para que compile
+    {
+      url: `${BASE_URL}/blog`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.8,
+    },
   ]
 }

@@ -1,8 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export', // Genera HTML/CSS/JS estático en la carpeta 'out'
+  output: 'export', // Obligatorio para generar HTML estático
   images: {
-    unoptimized: true, // Necesario para 'export' si no usamos Cloudinary/Imgix
+    unoptimized: true, // Obligatorio si no usas un servicio externo (Cloudinary/Vercel Pro)
   },
 };
 
