@@ -2,7 +2,7 @@
 title: "Kick-off 2026: La mejor herramienta de Team Building es una Parrilla"
 date: "2026-02-15"
 excerpt: "Saca a tu equipo de la sala de reuniones. Te explicamos por qué un asado premium es la mejor inversión para motivar a tus colaboradores este marzo."
-image: "/blog/asado-corporativo.jpg"
+image: "/blog/default.webp"
 author: "Socios del Fuego"
 tags: ["Corporativo", "Empresas", "Team Building"]
 ---

@@ -1,5 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Oswald } from "next/font/google";
+// 1. IMPORTAR ANALYTICS AQUÍ
+import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
@@ -99,7 +101,11 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
+        
         {children}
+
+        {/* 2. COMPONENTE ANALYTICS AL FINAL */}
+        <Analytics />
       </body>
     </html>
   );

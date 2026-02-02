@@ -1,13 +1,22 @@
+
 import Link from "next/link";
 import { getAllPosts } from "@/lib/blog";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { CalendarDays, ArrowRight } from "lucide-react";
 import { Metadata } from "next";
+import Image from "next/image";
 
 export const metadata: Metadata = {
   title: "Blog Parrillero | Tips y Secretos de Socios del Fuego",
-  description: "Aprende los secretos del asado perfecto, cálculos de carne y recetas con nuestros expertos parrilleros.",
+  description:
+    "Aprende los secretos del asado perfecto, cálculos de carne y recetas con nuestros expertos parrilleros.",
 };
 
 export default function BlogIndex() {
@@ -16,14 +25,14 @@ export default function BlogIndex() {
   return (
     <div className="min-h-screen bg-stone-950 font-sans pt-20 pb-24">
       <div className="container mx-auto px-4">
-        
         {/* Header del Blog */}
         <div className="text-center mb-16">
           <h1 className="font-oswald text-4xl md:text-6xl font-bold text-white mb-4 uppercase">
             Cultura <span className="text-orange-600">Parrillera</span>
           </h1>
           <p className="text-stone-400 max-w-2xl mx-auto">
-            Guías, consejos y secretos para que te conviertas en un experto del fuego.
+            Guías, consejos y secretos para que te conviertas en un experto del
+            fuego.
           </p>
         </div>
 
@@ -33,20 +42,28 @@ export default function BlogIndex() {
             <Link key={post.slug} href={`/blog/${post.slug}`} className="group">
               <Card className="bg-stone-900 border-stone-800 hover:border-orange-600/50 transition-all h-full flex flex-col overflow-hidden group-hover:shadow-lg group-hover:shadow-orange-900/20">
                 {/* Imagen Placeholder (Si no tienes imagen real en el post, usa un fallback) */}
+                {/* Imagen del Post con Fallback y Efecto Zoom */}
                 <div className="h-48 bg-stone-800 relative overflow-hidden">
-                   <div className="absolute inset-0 bg-stone-700 group-hover:scale-105 transition-transform duration-500" /> 
-                   {/* Aquí iría <Image src={post.image} ... /> */}
+                  <Image
+                    src={post.image || "/blog/default.webp"}
+                    alt={post.title}
+                    fill
+                    className="object-cover opacity-80 group-hover:scale-105 transition-transform duration-500"
+                  />
                 </div>
-                
+
                 <CardHeader>
                   <div className="flex justify-between items-center mb-2">
-                     <Badge variant="outline" className="text-orange-500 border-orange-900/50 text-xs">
-                        {post.tags?.[0] || "Blog"}
-                     </Badge>
-                     <div className="flex items-center text-stone-500 text-xs">
-                        <CalendarDays className="h-3 w-3 mr-1" />
-                        {post.date}
-                     </div>
+                    <Badge
+                      variant="outline"
+                      className="text-orange-500 border-orange-900/50 text-xs"
+                    >
+                      {post.tags?.[0] || "Blog"}
+                    </Badge>
+                    <div className="flex items-center text-stone-500 text-xs">
+                      <CalendarDays className="h-3 w-3 mr-1" />
+                      {post.date}
+                    </div>
                   </div>
                   <CardTitle className="font-oswald text-xl text-white group-hover:text-orange-500 transition-colors line-clamp-2">
                     {post.title}

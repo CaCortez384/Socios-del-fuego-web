@@ -2,7 +2,7 @@
 title: "¿Cuánta carne comprar por persona para un asado?"
 date: "2024-02-02"
 excerpt: "La guía definitiva para no quedarte corto ni desperdiciar comida en tu próximo evento parrillero."
-image: "/blog/carne-cruda.jpg"
+image: "/blog/default.webp"
 author: "Maestro Parrillero"
 tags: ["Tips Parrilleros", "Guías"]
 ---

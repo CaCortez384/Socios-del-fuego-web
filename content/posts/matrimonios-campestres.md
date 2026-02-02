@@ -2,7 +2,7 @@
 title: "Matrimonios Campestres: Por qué el Cordero al Palo es la Tendencia 2026"
 date: "2026-02-02"
 excerpt: "¿Planeando una boda civil al aire libre? Olvídate del banquete tradicional. Descubre cómo un asado premium transforma tu celebración en una experiencia inolvidable."
-image: "/blog/cordero-matrimonio.jpg"
+image: "/blog/default.webp"
 author: "Socios del Fuego"
 tags: ["Matrimonios", "Tendencias", "Cordero al Palo"]
 ---

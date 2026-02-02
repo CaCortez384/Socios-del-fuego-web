@@ -2,7 +2,7 @@
 title: "¿Lomo Vetado o Punta de Ganso? Elige el Rey de tu Asado"
 date: "2026-03-10"
 excerpt: "La eterna discusión parrillera. Analizamos los dos cortes favoritos de los chilenos para ayudarte a decidir cuál no puede faltar en tu próximo evento en Chicureo o Las Condes."
-image: "/blog/lomo-vs-punta.jpg"
+image: "/blog/default.webp"
 author: "Socios del Fuego"
 tags: ["Tips Parrilleros", "Carne", "Educación"]
 ---
