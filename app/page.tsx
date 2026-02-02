@@ -456,7 +456,7 @@ export default function LandingPage() {
               <CardContent>
                 <p className="text-sm text-stone-400">
                   Melipilla, Pomaire, Talagante, Isla de Maipo, Peñaflor, El
-                  Monte.
+                  Monte, y más.
                 </p>
               </CardContent>
             </Card>
@@ -470,7 +470,7 @@ export default function LandingPage() {
               <CardContent>
                 <p className="text-sm text-stone-400">
                   Maipú, Las Condes, Vitacura, Providencia, La Florida, Colina,
-                  Chicureo.
+                  Chicureo, y más.
                 </p>
               </CardContent>
             </Card>
@@ -485,7 +485,7 @@ export default function LandingPage() {
               <CardContent>
                 <p className="text-sm text-stone-400">
                   San Antonio, Algarrobo, Santo Domingo, Viña del Mar,
-                  Valparaíso, Concón.
+                  Valparaíso, Concón, y más.
                 </p>
               </CardContent>
             </Card>
@@ -498,7 +498,7 @@ export default function LandingPage() {
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-stone-400">
-                  Rancagua, Machalí, Graneros, San Francisco de Mostazal.
+                  Rancagua, Machalí, Graneros, San Francisco de Mostazal, y más.
                 </p>
               </CardContent>
             </Card>
