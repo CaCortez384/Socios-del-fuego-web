@@ -170,7 +170,7 @@ export default function LandingPage() {
                   <Star className="h-5 w-5 fill-current" />
                 </div>
                 <p className="text-white font-oswald text-xl font-bold">
-                  4.9/5 Estrellas
+                  Servicio Premium
                 </p>
                 <p className="text-stone-500 text-xs uppercase tracking-wider">
                   Calidad Garantizada
@@ -179,7 +179,7 @@ export default function LandingPage() {
               <div className="flex flex-col items-center">
                 <CalendarDays className="h-6 w-6 text-orange-600 mb-2" />
                 <p className="text-white font-oswald text-xl font-bold">
-                  +200 Eventos
+                  Varios Eventos
                 </p>
                 <p className="text-stone-500 text-xs uppercase tracking-wider">
                   Realizados con Éxito
@@ -188,10 +188,10 @@ export default function LandingPage() {
               <div className="flex flex-col items-center">
                 <Users className="h-6 w-6 text-orange-600 mb-2" />
                 <p className="text-white font-oswald text-xl font-bold">
-                  +3.000 Comensales
+                  100% clientes
                 </p>
                 <p className="text-stone-500 text-xs uppercase tracking-wider">
-                  Atendidos
+                  Satisfechos
                 </p>
               </div>
               <div className="flex flex-col items-center">
