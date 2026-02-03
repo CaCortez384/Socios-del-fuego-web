@@ -33,6 +33,7 @@ import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
+import { cn, trackCotizacion } from "@/lib/utils"; // Asegúrate de importar trackCotizacion
 
 const COTIZAR_URL = "https://socios-del-fuego.web.app/?v=cotizar";
 
@@ -92,7 +93,7 @@ export default function LandingPage() {
             asChild
             className="bg-orange-600 hover:bg-orange-700 text-white font-bold tracking-wider"
           >
-            <a href={COTIZAR_URL} target="_blank" rel="noopener noreferrer">
+            <a href={COTIZAR_URL} target="_blank" rel="noopener noreferrer" onClick={() => trackCotizacion("navbar")}>
               COTIZAR
             </a>
           </Button>
@@ -148,6 +149,7 @@ export default function LandingPage() {
                     href={COTIZAR_URL}
                     target="_blank"
                     rel="noopener noreferrer"
+                    onClick={() => trackCotizacion("landing_hero")} // <--- AGREGAR ESTO
                   >
                     Cotizar Disponibilidad
                   </a>
@@ -370,7 +372,7 @@ export default function LandingPage() {
               size="lg"
               className="bg-orange-600 hover:bg-orange-700 text-white font-oswald uppercase text-xl px-12 py-8 h-auto tracking-wider shadow-lg shadow-orange-900/20 hover:scale-105 transition-transform"
             >
-              <a href={COTIZAR_URL} target="_blank" rel="noopener noreferrer">
+              <a href={COTIZAR_URL} target="_blank" rel="noopener noreferrer" onClick={() => trackCotizacion("landing_planes")}>
                 Cotizar mi Asado
               </a>
             </Button>
@@ -409,6 +411,7 @@ export default function LandingPage() {
                     href={COTIZAR_URL}
                     target="_blank"
                     rel="noopener noreferrer"
+                    onClick={() => trackCotizacion("landing_cordero")} // <--- AGREGAR ESTO
                   >
                     AGREGAR A MI EVENTO
                   </a>

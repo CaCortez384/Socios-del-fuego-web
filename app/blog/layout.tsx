@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Home, ArrowLeft } from "lucide-react";
+import { trackCotizacion } from "@/lib/utils"; // Ajusta la ruta si es necesario
 
 export default function BlogLayout({
   children,
@@ -49,7 +50,7 @@ export default function BlogLayout({
                 </Link>
              </Button>
              <Button asChild className="bg-orange-600 hover:bg-orange-700 text-white font-oswald uppercase tracking-wider">
-                <a href="https://socios-del-fuego.web.app/?v=cotizar" target="_blank" rel="noopener noreferrer">
+                <a href="https://socios-del-fuego.web.app/?v=cotizar" target="_blank" rel="noopener noreferrer" onClick={() => trackCotizacion("blog_navbar")}>
                    Cotizar
                 </a>
              </Button>
