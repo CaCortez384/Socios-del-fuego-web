@@ -50,7 +50,7 @@ export default function BlogLayout({
                 </Link>
              </Button>
              <Button asChild className="bg-orange-600 hover:bg-orange-700 text-white font-oswald uppercase tracking-wider">
-                <a href="https://socios-del-fuego.web.app/?v=cotizar" target="_blank" rel="noopener noreferrer" onClick={() => trackCotizacion("blog_navbar")}>
+                <a href="https://socios-del-fuego.web.app/?v=cotizar" target="_blank" rel="noopener noreferrer" >
                    Cotizar
                 </a>
              </Button>
