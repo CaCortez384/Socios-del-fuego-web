@@ -53,8 +53,9 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // Definición de Datos Estructurados (Schema.org)
-  const jsonLd = {
+  
+  // 1. SCHEMA DE NEGOCIO (FoodEstablishment) - Mantiene tu SEO local
+  const jsonLdBusiness = {
     "@context": "https://schema.org",
     "@type": "FoodEstablishment",
     "name": "Socios del Fuego",
@@ -98,6 +99,15 @@ export default function RootLayout({
     "acceptsReservations": "True"
   };
 
+  // 2. SCHEMA DE SITIO WEB (WebSite) - ESTE ES EL PARCHE PARA GOOGLE
+  const jsonLdWebsite = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Socios del Fuego",
+    "alternateName": ["Asados Socios del Fuego", "SociosDelFuego"],
+    "url": "https://sociosdelfuego.cl"
+  };
+
   return (
     <html lang="es" className="dark scroll-smooth">
       <body className={`${inter.variable} ${oswald.variable} antialiased bg-stone-950 text-stone-50`}>
@@ -117,7 +127,7 @@ export default function RootLayout({
           `}
         </Script>
 
-        {/* --- MICROSOFT CLARITY (NUEVO) --- */}
+        {/* --- MICROSOFT CLARITY --- */}
         <Script id="microsoft-clarity" strategy="afterInteractive">
           {`
             (function(c,l,a,r,i,t,y){
@@ -128,10 +138,16 @@ export default function RootLayout({
           `}
         </Script>
 
-        {/* JSON-LD Schema */}
+        {/* INYECCIÓN 1: DATOS DEL NEGOCIO */}
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdBusiness) }}
+        />
+
+        {/* INYECCIÓN 2: DATOS DEL SITIO WEB (NOMBRE CORRECTO) */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdWebsite) }}
         />
         
         {children}
