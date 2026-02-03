@@ -1,7 +1,9 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Oswald } from "next/font/google";
-// 1. IMPORTAR ANALYTICS AQUÍ
+// 1. IMPORTAR ANALYTICS DE VERCEL
 import { Analytics } from "@vercel/analytics/react";
+// 2. IMPORTAR COMPONENTE SCRIPT
+import Script from "next/script"; 
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
@@ -40,6 +42,9 @@ export const metadata: Metadata = {
   robots: {
     index: true,
     follow: true,
+  },
+  verification: {
+    google: "NiSX12KwWb_hi1hTK-vk99i2PGqEw7CZs8cVyaFrtc8",
   },
 };
 
@@ -95,9 +100,35 @@ export default function RootLayout({
 
   return (
     <html lang="es" className="dark scroll-smooth">
-      <meta name="google-site-verification" content="NiSX12KwWb_hi1hTK-vk99i2PGqEw7CZs8cVyaFrtc8" />
       <body className={`${inter.variable} ${oswald.variable} antialiased bg-stone-950 text-stone-50`}>
-        {/* Inyección del JSON-LD para Google */}
+        
+        {/* --- GOOGLE ANALYTICS (GA4) --- */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-S9YQ2GMPCK"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-S9YQ2GMPCK');
+          `}
+        </Script>
+
+        {/* --- MICROSOFT CLARITY (NUEVO) --- */}
+        <Script id="microsoft-clarity" strategy="afterInteractive">
+          {`
+            (function(c,l,a,r,i,t,y){
+                c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+                t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+                y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+            })(window, document, "clarity", "script", "vbccy2dm24");
+          `}
+        </Script>
+
+        {/* JSON-LD Schema */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -105,7 +136,7 @@ export default function RootLayout({
         
         {children}
 
-        {/* 2. COMPONENTE ANALYTICS AL FINAL */}
+        {/* VERCEL ANALYTICS */}
         <Analytics />
       </body>
     </html>
