@@ -5,7 +5,6 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-// Declaración global para evitar que TypeScript llore con los objetos de tracking
 declare global {
   interface Window {
     gtag?: (...args: unknown[]) => void;
@@ -14,25 +13,26 @@ declare global {
 }
 
 export const trackCotizacion = (ubicacion: string) => {
-  // Guardia de seguridad: si no estamos en el navegador, no hacemos nada.
+  // Guardia de seguridad para Next.js SSR
   if (typeof window === "undefined") return;
 
-  // 1. Enviar a Google Analytics 4 (Para tu análisis)
+  // 1. Enviar a Google Analytics 4
   if (typeof window.gtag === "function") {
-    window.gtag("event", "click_cotizar", {
-      event_category: "conversion",
-      event_label: ubicacion,
-      value: 1, 
+    // GA4 usa parámetros planos en lugar de Categoría/Etiqueta
+    window.gtag("event", "iniciar_cotizacion", {
+      ubicacion_boton: ubicacion, // De dónde hizo clic (navbar, hero, etc.)
     });
   } else {
     console.warn("GA4 no está cargado o fue bloqueado.");
   }
 
-  // 2. Enviar a Meta Pixel (El motor para optimizar tus anuncios de asados)
+  // 2. Enviar a Meta Pixel (Instagram)
   if (typeof window.fbq === "function") {
-    // Usamos el evento estándar 'Lead' para entrenar al algoritmo
-    window.fbq("track", "Lead", {
-      content_name: "Clic en Cotizar",
+    // CAMBIO CLAVE: Usamos "InitiateCheckout" en vez de "Lead"
+    // Esto entrena a Instagram para buscar gente que INICIA el proceso,
+    // reservando el evento "Lead" o "Purchase" para cuando terminen el cotizador.
+    window.fbq("track", "InitiateCheckout", {
+      content_name: "Inicia Cotizador",
       content_category: ubicacion,
     });
   } else {

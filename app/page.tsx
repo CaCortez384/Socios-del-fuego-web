@@ -33,7 +33,7 @@ import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
-import { cn, trackCotizacion } from "@/lib/utils"; // Asegúrate de importar trackCotizacion
+import { cn, trackCotizacion } from "@/lib/utils"; 
 
 const COTIZAR_URL = "https://socios-del-fuego.web.app/?v=cotizar";
 
@@ -51,7 +51,7 @@ export default function LandingPage() {
           <div className="flex items-center gap-2">
             <div className="relative h-10 w-10 overflow-hidden rounded-full border border-orange-600/20">
               <Image
-                src="/logo.webp" // Antes .png
+                src="/logo.webp" 
                 alt="Logo Socios del Fuego"
                 fill
                 className="object-cover"
@@ -93,7 +93,8 @@ export default function LandingPage() {
             asChild
             className="bg-orange-600 hover:bg-orange-700 text-white font-bold tracking-wider"
           >
-            <a href={COTIZAR_URL} target="_blank" rel="noopener noreferrer" onClick={() => trackCotizacion("navbar")}>
+            {/* MODIFICADO: target="_blank" eliminado para no sacar al usuario en móviles */}
+            <a href={COTIZAR_URL} onClick={() => trackCotizacion("navbar")}>
               COTIZAR
             </a>
           </Button>
@@ -101,10 +102,19 @@ export default function LandingPage() {
       </nav>
 
       <main>
-        {/* B. HERO SECTION (SEO OPTIMIZADO) */}
+        {/* B. HERO SECTION (SEO OPTIMIZADO Y RENDIMIENTO MEJORADO) */}
         <section className="relative min-h-[85vh] w-full flex items-center justify-center overflow-hidden border-b border-stone-800">
+          
+          {/* MODIFICADO: Imagen de fondo ahora usa Next/Image con priority para carga instantánea */}
           <div className="absolute inset-0 bg-stone-900 z-0">
-            <div className="absolute inset-0 opacity-40 bg-[url('https://images.unsplash.com/photo-1555939594-58d7cb561ad1?q=80&w=2000&auto=format&fit=crop')] bg-cover bg-center" />
+            <Image
+              src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?q=80&w=2000&auto=format&fit=crop"
+              alt="Asados Premium a Domicilio"
+              fill
+              priority
+              className="object-cover opacity-40"
+              sizes="100vw"
+            />
             <div className="absolute inset-0 bg-gradient-to-t from-stone-950 via-stone-950/60 to-transparent" />
           </div>
 
@@ -122,7 +132,6 @@ export default function LandingPage() {
                 Melipilla • Santiago • V y VI Región
               </Badge>
 
-              {/* CAMBIO H1 SEO */}
               <h1 className="font-oswald text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 tracking-tight leading-tight uppercase max-w-5xl">
                 ASADOS PREMIUM A DOMICILIO <br className="hidden md:block" />
                 <span className="text-orange-600">
@@ -130,7 +139,6 @@ export default function LandingPage() {
                 </span>
               </h1>
 
-              {/* BAJADA CON KEYWORDS DE CLIENTE */}
               <p className="text-lg md:text-2xl text-stone-300 mb-10 max-w-3xl mx-auto font-light border-l-4 border-orange-600 pl-4 md:pl-0 md:border-l-0">
                 Especialistas en Matrimonios Campestres, Eventos de Empresa y
                 Celebraciones Privadas.
@@ -145,11 +153,10 @@ export default function LandingPage() {
                   size="lg"
                   className="bg-orange-600 hover:bg-orange-700 text-white text-lg px-10 py-8 h-auto font-oswald uppercase tracking-wider shadow-[0_0_30px_rgba(234,88,12,0.4)] animate-pulse"
                 >
+                  {/* MODIFICADO: target="_blank" eliminado */}
                   <a
                     href={COTIZAR_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={() => trackCotizacion("landing_hero")} // <--- AGREGAR ESTO
+                    onClick={() => trackCotizacion("landing_hero")} 
                   >
                     Cotizar Disponibilidad
                   </a>
@@ -159,7 +166,7 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* NUEVA SECCIÓN: PRUEBA SOCIAL (TRUST BAR) */}
+        {/* PRUEBA SOCIAL (TRUST BAR) */}
         <section className="bg-stone-900 border-b border-stone-800 py-8">
           <div className="container mx-auto px-4">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center divide-x divide-stone-800/0 md:divide-stone-800">
@@ -209,10 +216,10 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* C. PLANES (LIMPIEZA DE METALES) */}
+        {/* C. PLANES (MODIFICADO: Agregado scroll-mt-24) */}
         <section
           id="experiencias"
-          className="py-24 bg-stone-950 container mx-auto px-4"
+          className="py-24 bg-stone-950 container mx-auto px-4 scroll-mt-24"
         >
           <div className="text-center mb-16">
             <h2 className="font-oswald text-4xl font-bold text-white mb-4 uppercase">
@@ -225,10 +232,8 @@ export default function LandingPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-12">
-            {/* 1. FUEGO CRIOLLO */}
             <Card className="bg-stone-900 border-stone-800 hover:border-orange-700/50 transition-colors flex flex-col">
               <CardHeader>
-                {/* ELIMINADO: Bronce */}
                 <CardTitle className="font-oswald text-2xl text-white">
                   Fuego Criollo
                 </CardTitle>
@@ -258,10 +263,8 @@ export default function LandingPage() {
               </CardContent>
             </Card>
 
-            {/* 2. FUEGO TOTAL */}
             <Card className="bg-stone-900 border-stone-800 hover:border-red-600/50 transition-colors flex flex-col">
               <CardHeader>
-                {/* ELIMINADO: Rojo Intenso */}
                 <CardTitle className="font-oswald text-2xl text-white">
                   Fuego Total
                 </CardTitle>
@@ -291,7 +294,6 @@ export default function LandingPage() {
               </CardContent>
             </Card>
 
-            {/* 3. FUEGO PREMIUM */}
             <Card className="bg-stone-900 border-sky-600/50 relative flex flex-col shadow-[0_0_20px_rgba(2,132,199,0.15)]">
               <div className="absolute -top-3 left-1/2 -translate-x-1/2">
                 <Badge className="bg-sky-600 hover:bg-sky-700 text-white font-bold border-none px-4">
@@ -299,7 +301,6 @@ export default function LandingPage() {
                 </Badge>
               </div>
               <CardHeader>
-                {/* ELIMINADO: Plata Sofisticado */}
                 <CardTitle className="font-oswald text-2xl text-white">
                   Fuego Premium
                 </CardTitle>
@@ -329,13 +330,11 @@ export default function LandingPage() {
               </CardContent>
             </Card>
 
-            {/* 4. EXTRA PREMIUM */}
             <Card className="bg-gradient-to-br from-stone-900 to-stone-800 border-yellow-500/40 flex flex-col relative overflow-hidden">
               <div className="absolute top-0 right-0 bg-yellow-600 text-white text-[10px] font-bold px-2 py-1 uppercase">
                 Lujo
               </div>
               <CardHeader>
-                {/* ELIMINADO: Oro */}
                 <CardTitle className="font-oswald text-2xl text-white">
                   Extra Premium
                 </CardTitle>
@@ -372,7 +371,8 @@ export default function LandingPage() {
               size="lg"
               className="bg-orange-600 hover:bg-orange-700 text-white font-oswald uppercase text-xl px-12 py-8 h-auto tracking-wider shadow-lg shadow-orange-900/20 hover:scale-105 transition-transform"
             >
-              <a href={COTIZAR_URL} target="_blank" rel="noopener noreferrer" onClick={() => trackCotizacion("landing_planes")}>
+              {/* MODIFICADO: target="_blank" eliminado */}
+              <a href={COTIZAR_URL} onClick={() => trackCotizacion("landing_planes")}>
                 Cotizar mi Asado
               </a>
             </Button>
@@ -382,10 +382,10 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* D. SECCIÓN ESPECIAL: CORDERO AL PALO */}
+        {/* D. SECCIÓN ESPECIAL: CORDERO AL PALO (MODIFICADO: scroll-mt-24) */}
         <section
           id="cordero"
-          className="py-20 bg-stone-900 border-y border-stone-800"
+          className="py-20 bg-stone-900 border-y border-stone-800 scroll-mt-24"
         >
           <div className="container mx-auto px-4">
             <div className="flex flex-col md:flex-row items-center gap-10 bg-stone-950 p-8 rounded-2xl border border-stone-800">
@@ -407,18 +407,16 @@ export default function LandingPage() {
                   variant="outline"
                   className="border-orange-600 text-orange-500 hover:bg-orange-600 hover:text-white font-oswald uppercase"
                 >
+                  {/* MODIFICADO: target="_blank" eliminado */}
                   <a
                     href={COTIZAR_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={() => trackCotizacion("landing_cordero")} // <--- AGREGAR ESTO
+                    onClick={() => trackCotizacion("landing_cordero")}
                   >
                     AGREGAR A MI EVENTO
                   </a>
                 </Button>
               </div>
 
-              {/* IMAGEN OPTIMIZADA CON NEXT/IMAGE */}
               <div className="md:w-1/2 h-64 md:h-80 w-full bg-stone-800 rounded-xl flex items-center justify-center border border-stone-700 relative overflow-hidden group">
                 <Image
                   src="/cordero.webp"
@@ -434,10 +432,10 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* E. ZONAS Y TRANSPORTE */}
+        {/* E. ZONAS Y TRANSPORTE (MODIFICADO: scroll-mt-24) */}
         <section
           id="zonas"
-          className="py-20 bg-stone-950 container mx-auto px-4"
+          className="py-20 bg-stone-950 container mx-auto px-4 scroll-mt-24"
         >
           <div className="text-center mb-12">
             <h2 className="font-oswald text-3xl font-bold text-white mb-4 uppercase">
@@ -525,10 +523,10 @@ export default function LandingPage() {
           </Alert>
         </section>
 
-        {/* G. FAQ COMPACTA */}
+        {/* G. FAQ COMPACTA (MODIFICADO: scroll-mt-24) */}
         <section
           id="faq"
-          className="py-16 bg-stone-950 max-w-2xl mx-auto px-4 border-t border-stone-800"
+          className="py-16 bg-stone-950 max-w-2xl mx-auto px-4 border-t border-stone-800 scroll-mt-24"
         >
           <h2 className="text-3xl font-oswald font-bold text-white text-center mb-8">
             DUDAS FRECUENTES
@@ -562,7 +560,7 @@ export default function LandingPage() {
         </section>
       </main>
 
-      {/* H. BANNER BLOG (NUEVA SECCIÓN) */}
+      {/* H. BANNER BLOG */}
       <section className="py-16 bg-stone-900 border-t border-stone-800">
         <div className="container mx-auto px-4 text-center">
           <h2 className="font-oswald text-3xl font-bold text-white mb-4 uppercase">
@@ -606,7 +604,6 @@ export default function LandingPage() {
           </div>
 
           <div className="flex flex-col md:flex-row gap-6 text-sm text-stone-400">
-            {/* NUEVO ENLACE AL BLOG */}
             <Link
               href="/blog"
               className="hover:text-orange-500 flex items-center gap-2 justify-center md:justify-start"
