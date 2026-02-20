@@ -128,7 +128,7 @@ export default function RootLayout({
       >
         {/* --- GOOGLE ANALYTICS (GA4) --- */}
         <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-B5PB45XGP9"
+          src="https://www.googletagmanager.com/gtag/js?id=G-9R8YFVJTJD"
           strategy="afterInteractive"
         />
         <Script id="google-analytics" strategy="afterInteractive">
@@ -140,7 +140,7 @@ export default function RootLayout({
             // CONFIGURACIÓN MEJORADA: 
             // - Mantiene el rastreo de página estándar.
             // - Asegura que los enlaces al cotizador no rompan la sesión.
-            gtag('config', 'G-B5PB45XGP9', {
+            gtag('config', 'G-9R8YFVJTJD', {
               page_path: window.location.pathname,
               send_page_view: true,
               cookie_flags: 'SameSite=None;Secure' // Crucial para que GA4 reconozca al usuario cuando pase de .cl a .web.app
