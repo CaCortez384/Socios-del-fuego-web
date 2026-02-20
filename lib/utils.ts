@@ -12,33 +12,64 @@ declare global {
   }
 }
 
-export const trackCotizacion = (ubicacion: string) => {
-  // Guardia de seguridad para Next.js SSR
+// 1. DEFINIMOS LA ESTRUCTURA EXACTA DEL EVENTO (Adiós al 'any')
+export interface AnalyticsEventPayload {
+  value?: number;
+  currency?: string;
+  items?: Array<{
+    item_id: string;
+    item_name: string;
+    price: number;
+  }>;
+  lead_source?: string;
+  checkout_origin?: string;
+  // Comodín seguro: Permite otras propiedades de GA4 pero exige verificación antes de usarlas
+  [key: string]: unknown; 
+}
+
+/**
+ * Motor de Analítica Unificado (GA4 + Meta Pixel)
+ */
+export const trackCotizacion = (eventName: string, payload: AnalyticsEventPayload = {}) => {
   if (typeof window === "undefined") return;
 
-  // 1. Enviar a Google Analytics 4
+  // 1. GA4
   if (typeof window.gtag === "function") {
-    // GA4 usa parámetros planos en lugar de Categoría/Etiqueta
-    window.gtag("event", "iniciar_cotizacion", {
-      ubicacion_boton: ubicacion, // De dónde hizo clic (navbar, hero, etc.)
-    });
+    window.gtag("event", eventName, payload);
   } else {
-    console.warn("GA4 no está cargado o fue bloqueado.");
+    console.warn("GA4 no está cargado o fue bloqueado por el navegador.");
   }
 
-  // 2. Enviar a Meta Pixel (Instagram)
+  // 2. Meta Pixel
   if (typeof window.fbq === "function") {
-    // CAMBIO CLAVE: Usamos "InitiateCheckout" en vez de "Lead"
-    // Esto entrena a Instagram para buscar gente que INICIA el proceso,
-    // reservando el evento "Lead" o "Purchase" para cuando terminen el cotizador.
-    window.fbq("track", "InitiateCheckout", {
-      content_name: "Inicia Cotizador",
-      content_category: ubicacion,
-    });
+    let fbEvent = "Lead";
+    let fbPayload: Record<string, unknown> = {};
+
+    if (eventName === "begin_checkout") {
+      fbEvent = "InitiateCheckout";
+      fbPayload = {
+        content_name: payload.items?.[0]?.item_name || "Plan de Asado",
+        // TypeScript ahora sabe que 'item' tiene la propiedad 'item_id' gracias a la interfaz
+        content_ids: payload.items?.map((item) => item.item_id) || [],
+        content_type: "product",
+        value: payload.value,
+        currency: payload.currency || "CLP",
+      };
+    } 
+    else if (eventName === "generate_lead") {
+      fbEvent = "Lead";
+      fbPayload = {
+        content_name: "Intención de Cotización",
+        content_category: payload.lead_source || "general",
+      };
+    }
+
+    window.fbq("track", fbEvent, fbPayload);
   } else {
-    console.warn("Meta Pixel no está cargado o fue bloqueado.");
+    console.warn("Meta Pixel no está cargado o fue bloqueado por el navegador.");
   }
   
-  // Opcional para desarrollo
-  console.log(`🔥 Intención de cotización registrada desde: ${ubicacion}`);
+  if (process.env.NODE_ENV !== "production") {
+    console.log(`🔥 Evento disparado: [${eventName}]`, payload);
+  }
 };

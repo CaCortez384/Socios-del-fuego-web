@@ -44,7 +44,7 @@ import {
 } from "@/components/ui/dialog";
 import Image from "next/image";
 
-// TUS IMPORTACIONES DE LÓGICA Y DATOS
+// IMPORTACIONES DE LÓGICA Y DATOS
 import { cn, trackCotizacion } from "@/lib/utils";
 import { PLANS } from "@/lib/plans"; 
 
@@ -83,7 +83,8 @@ export default function LandingPage() {
           </div>
 
           <Button asChild className="bg-orange-600 hover:bg-orange-700 text-white font-bold tracking-wider">
-            <a href={COTIZAR_URL} onClick={() => trackCotizacion("navbar")}>COTIZAR</a>
+            {/* EVENTO GA4: Generación de Lead genérico */}
+            <a href={COTIZAR_URL} onClick={() => trackCotizacion("generate_lead", { lead_source: "navbar" })}>COTIZAR</a>
           </Button>
         </div>
       </nav>
@@ -120,7 +121,8 @@ export default function LandingPage() {
 
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                 <Button asChild size="lg" className="bg-orange-600 hover:bg-orange-700 text-white text-lg px-10 py-8 h-auto font-oswald uppercase tracking-wider shadow-[0_0_30px_rgba(234,88,12,0.4)] animate-pulse">
-                  <a href={COTIZAR_URL} onClick={() => trackCotizacion("landing_hero")}>
+                  {/* EVENTO GA4: Generación de Lead genérico */}
+                  <a href={COTIZAR_URL} onClick={() => trackCotizacion("generate_lead", { lead_source: "hero" })}>
                     Cotizar Disponibilidad
                   </a>
                 </Button>
@@ -159,7 +161,7 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* C. PLANES (CON INTERACCIÓN MODAL Y PRECIOS CLAROS) */}
+        {/* C. PLANES (CON EVENTOS ECOMMERCE) */}
         <section id="experiencias" className="py-24 bg-stone-950 container mx-auto px-4 scroll-mt-24">
           <div className="text-center mb-16">
             <h2 className="font-oswald text-4xl font-bold text-white mb-4 uppercase">Nuestros Planes</h2>
@@ -182,7 +184,6 @@ export default function LandingPage() {
                     <div className="absolute top-0 right-0 bg-yellow-600 text-white text-[10px] font-bold px-2 py-1 uppercase z-10">Lujo</div>
                   )}
 
-                  {/* ZONA DE DESCUBRIMIENTO (Abre el Modal) */}
                   <DialogTrigger asChild>
                     <div className="cursor-pointer group flex-1 flex flex-col p-6 pb-0 outline-none">
                       <div className="pb-4">
@@ -209,16 +210,26 @@ export default function LandingPage() {
                     </div>
                   </DialogTrigger>
 
-                  {/* ZONA DE COMPRA (Botón Directo) */}
                   <div className="p-6 pt-0 mt-auto">
                     <Button asChild className={`w-full font-bold uppercase tracking-wider relative z-20 ${plan.id === 'extra_premium' ? 'bg-yellow-600 hover:bg-yellow-700 text-white' : plan.id === 'premium' ? 'bg-sky-600 hover:bg-sky-700 text-white' : 'bg-stone-800 hover:bg-orange-600 text-white'}`}>
-                      <a href={`${COTIZAR_URL}&plan=${plan.id}`} onClick={(e) => { e.stopPropagation(); trackCotizacion(`tarjeta_plan_${plan.id}`); }}>
+                      {/* EVENTO GA4: Inicio de Checkout (Ecommerce) desde la tarjeta */}
+                      <a 
+                        href={`${COTIZAR_URL}&plan=${plan.id}`} 
+                        onClick={(e) => { 
+                          e.stopPropagation(); 
+                          trackCotizacion("begin_checkout", {
+                            value: plan.pricePerPerson,
+                            currency: "CLP",
+                            items: [{ item_id: plan.id, item_name: plan.name, price: plan.pricePerPerson }],
+                            checkout_origin: "card_button"
+                          }); 
+                        }}
+                      >
                         Cotizar {plan.name}
                       </a>
                     </Button>
                   </div>
 
-                  {/* EL MODAL CON EL MENÚ COMPLETO */}
                   <DialogContent className="bg-stone-950 border-stone-800 text-stone-200 max-w-md w-[95vw] rounded-xl overflow-hidden p-0">
                     <div className={`h-2 w-full ${plan.id === 'criollo' ? 'bg-orange-600' : plan.id === 'total' ? 'bg-red-600' : plan.id === 'premium' ? 'bg-sky-500' : 'bg-yellow-500'}`} />
                     <div className="p-6">
@@ -230,7 +241,6 @@ export default function LandingPage() {
                       </DialogHeader>
 
                       <div className="space-y-6 max-h-[60vh] overflow-y-auto pr-2 custom-scrollbar">
-                        {/* Carnes */}
                         <div>
                           <h4 className="flex items-center gap-2 font-oswald text-lg text-white mb-3 uppercase tracking-wider border-b border-stone-800 pb-2">
                             <Beef className="w-5 h-5 text-orange-500" /> Carnes al Fuego
@@ -242,7 +252,6 @@ export default function LandingPage() {
                           </ul>
                         </div>
 
-                        {/* Picoteo (Si aplica) */}
                         {plan.fullMenu.picoteo && (
                           <div>
                             <h4 className="flex items-center gap-2 font-oswald text-lg text-white mb-3 uppercase tracking-wider border-b border-stone-800 pb-2">
@@ -256,7 +265,6 @@ export default function LandingPage() {
                           </div>
                         )}
 
-                        {/* Ensaladas (Si aplica) */}
                         {plan.fullMenu.ensaladas && (
                           <div>
                             <h4 className="flex items-center gap-2 font-oswald text-lg text-white mb-3 uppercase tracking-wider border-b border-stone-800 pb-2">
@@ -270,7 +278,6 @@ export default function LandingPage() {
                           </div>
                         )}
 
-                        {/* Servicio */}
                         <div>
                           <h4 className="flex items-center gap-2 font-oswald text-lg text-white mb-3 uppercase tracking-wider border-b border-stone-800 pb-2">
                             <Utensils className="w-5 h-5 text-orange-500" /> Servicio Incluido
@@ -283,7 +290,19 @@ export default function LandingPage() {
 
                       <div className="mt-8">
                         <Button asChild className="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold h-12 uppercase tracking-wider">
-                          <a href={`${COTIZAR_URL}&plan=${plan.id}`} onClick={() => trackCotizacion(`modal_plan_${plan.id}`)}>
+                          {/* EVENTO GA4: Inicio de Checkout (Ecommerce) desde el Modal */}
+                          <a 
+                            href={`${COTIZAR_URL}&plan=${plan.id}`} 
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              trackCotizacion("begin_checkout", {
+                                value: plan.pricePerPerson,
+                                currency: "CLP",
+                                items: [{ item_id: plan.id, item_name: plan.name, price: plan.pricePerPerson }],
+                                checkout_origin: "modal_button"
+                              });
+                            }}
+                          >
                             Cotizar este plan ahora
                           </a>
                         </Button>
@@ -311,7 +330,8 @@ export default function LandingPage() {
                   La preparación tradicional magallánica al asador vertical. Un espectáculo visual y gastronómico para tu evento. Cocción lenta de 4 a 6 horas para lograr una carne que se deshace.
                 </p>
                 <Button asChild size="lg" variant="outline" className="border-orange-600 text-orange-500 hover:bg-orange-600 hover:text-white font-oswald uppercase">
-                  <a href={COTIZAR_URL} onClick={() => trackCotizacion("landing_cordero")}>
+                  {/* EVENTO GA4: Generación de Lead genérico */}
+                  <a href={COTIZAR_URL} onClick={() => trackCotizacion("generate_lead", { lead_source: "cordero_banner" })}>
                     AGREGAR A MI EVENTO
                   </a>
                 </Button>

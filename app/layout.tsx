@@ -137,7 +137,14 @@ export default function RootLayout({
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
 
-            gtag('config', 'G-B5PB45XGP9');
+            // CONFIGURACIÓN MEJORADA: 
+            // - Mantiene el rastreo de página estándar.
+            // - Asegura que los enlaces al cotizador no rompan la sesión.
+            gtag('config', 'G-B5PB45XGP9', {
+              page_path: window.location.pathname,
+              send_page_view: true,
+              cookie_flags: 'SameSite=None;Secure' // Crucial para que GA4 reconozca al usuario cuando pase de .cl a .web.app
+            });
           `}
         </Script>
 
