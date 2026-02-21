@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import {
   Flame,
   Check,
@@ -21,7 +23,6 @@ import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -44,13 +45,19 @@ import {
 } from "@/components/ui/dialog";
 import Image from "next/image";
 
-// IMPORTACIONES DE LÓGICA Y DATOS
-import { cn, trackCotizacion } from "@/lib/utils";
-import { PLANS } from "@/lib/plans"; 
+import { trackCotizacion } from "@/lib/utils";
+import { PLANS } from "@/lib/plans";
 
-const COTIZAR_URL = "https://socios-del-fuego.web.app/?v=cotizar";
+// Este es el componente principal que contiene toda la lógica y la UI de la landing
+function LandingContent() {
+  const searchParams = useSearchParams();
+  const queryString = searchParams.toString();
+  
+  // MAGIA DEL CROSS-DOMAIN: Mantiene vivo el fbclid de Meta o UTMs de Analytics
+  const COTIZAR_URL = queryString 
+    ? `https://socios-del-fuego.web.app/?v=cotizar&${queryString}`
+    : `https://socios-del-fuego.web.app/?v=cotizar`;
 
-export default function LandingPage() {
   const fadeInUp = {
     hidden: { opacity: 0, y: 30 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
@@ -83,7 +90,6 @@ export default function LandingPage() {
           </div>
 
           <Button asChild className="bg-orange-600 hover:bg-orange-700 text-white font-bold tracking-wider">
-            {/* EVENTO GA4: Generación de Lead genérico */}
             <a href={COTIZAR_URL} onClick={() => trackCotizacion("generate_lead", { lead_source: "navbar" })}>COTIZAR</a>
           </Button>
         </div>
@@ -121,7 +127,6 @@ export default function LandingPage() {
 
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                 <Button asChild size="lg" className="bg-orange-600 hover:bg-orange-700 text-white text-lg px-10 py-8 h-auto font-oswald uppercase tracking-wider shadow-[0_0_30px_rgba(234,88,12,0.4)] animate-pulse">
-                  {/* EVENTO GA4: Generación de Lead genérico */}
                   <a href={COTIZAR_URL} onClick={() => trackCotizacion("generate_lead", { lead_source: "hero" })}>
                     Cotizar Disponibilidad
                   </a>
@@ -174,7 +179,6 @@ export default function LandingPage() {
               <Dialog key={plan.id}>
                 <Card className={`bg-stone-900 border-stone-800 flex flex-col relative transition-all duration-300 hover:border-stone-600 ${plan.recommended ? 'shadow-[0_0_20px_rgba(2,132,199,0.15)] border-sky-600/50 hover:border-sky-500' : ''}`}>
                   
-                  {/* Etiquetas Absolutas */}
                   {plan.recommended && (
                     <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-10">
                       <Badge className="bg-sky-600 text-white font-bold border-none px-4 uppercase tracking-widest">Recomendado</Badge>
@@ -212,7 +216,6 @@ export default function LandingPage() {
 
                   <div className="p-6 pt-0 mt-auto">
                     <Button asChild className={`w-full font-bold uppercase tracking-wider relative z-20 ${plan.id === 'extra_premium' ? 'bg-yellow-600 hover:bg-yellow-700 text-white' : plan.id === 'premium' ? 'bg-sky-600 hover:bg-sky-700 text-white' : 'bg-stone-800 hover:bg-orange-600 text-white'}`}>
-                      {/* EVENTO GA4: Inicio de Checkout (Ecommerce) desde la tarjeta */}
                       <a 
                         href={`${COTIZAR_URL}&plan=${plan.id}`} 
                         onClick={(e) => { 
@@ -290,7 +293,6 @@ export default function LandingPage() {
 
                       <div className="mt-8">
                         <Button asChild className="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold h-12 uppercase tracking-wider">
-                          {/* EVENTO GA4: Inicio de Checkout (Ecommerce) desde el Modal */}
                           <a 
                             href={`${COTIZAR_URL}&plan=${plan.id}`} 
                             onClick={(e) => {
@@ -330,7 +332,6 @@ export default function LandingPage() {
                   La preparación tradicional magallánica al asador vertical. Un espectáculo visual y gastronómico para tu evento. Cocción lenta de 4 a 6 horas para lograr una carne que se deshace.
                 </p>
                 <Button asChild size="lg" variant="outline" className="border-orange-600 text-orange-500 hover:bg-orange-600 hover:text-white font-oswald uppercase">
-                  {/* EVENTO GA4: Generación de Lead genérico */}
                   <a href={COTIZAR_URL} onClick={() => trackCotizacion("generate_lead", { lead_source: "cordero_banner" })}>
                     AGREGAR A MI EVENTO
                   </a>
@@ -444,5 +445,14 @@ export default function LandingPage() {
         </div>
       </footer>
     </div>
+  );
+}
+
+// Este es el export default que Next.js espera, envuelto en Suspense
+export default function Page() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-stone-950" />}>
+      <LandingContent />
+    </Suspense>
   );
 }
