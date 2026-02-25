@@ -52,9 +52,9 @@ import { PLANS } from "@/lib/plans";
 function LandingContent() {
   const searchParams = useSearchParams();
   const queryString = searchParams.toString();
-  
+
   // MAGIA DEL CROSS-DOMAIN: Mantiene vivo el fbclid de Meta o UTMs de Analytics
-  const COTIZAR_URL = queryString 
+  const COTIZAR_URL = queryString
     ? `https://socios-del-fuego.web.app/?v=cotizar&${queryString}`
     : `https://socios-del-fuego.web.app/?v=cotizar`;
 
@@ -112,9 +112,14 @@ function LandingContent() {
 
           <div className="relative z-10 container px-4 text-center">
             <motion.div initial="hidden" animate="visible" variants={fadeInUp} className="flex flex-col items-center">
-              <Badge variant="outline" className="mb-6 border-orange-600/50 text-orange-500 px-4 py-1 tracking-widest uppercase bg-stone-950/50 backdrop-blur-sm">
-                Melipilla • Santiago • V y VI Región
-              </Badge>
+              <div className="flex flex-col md:flex-row gap-3 items-center justify-center mb-6">
+                <Badge variant="outline" className="border-orange-600/50 text-orange-500 px-4 py-1 tracking-widest uppercase bg-stone-950/50 backdrop-blur-sm">
+                  Melipilla • Santiago • V y VI Región
+                </Badge>
+                <Badge className="bg-orange-600 hover:bg-orange-500 text-white px-4 py-1 tracking-widest uppercase font-bold animate-pulse shadow-[0_0_15px_rgba(234,88,12,0.3)]">
+                  🔥 Temporada Alta: Últimas fechas
+                </Badge>
+              </div>
 
               <h1 className="font-oswald text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 tracking-tight leading-tight uppercase max-w-5xl">
                 ASADOS PREMIUM A DOMICILIO <br className="hidden md:block" />
@@ -136,31 +141,35 @@ function LandingContent() {
           </div>
         </section>
 
-        {/* PRUEBA SOCIAL (TRUST BAR) */}
-        <section className="bg-stone-900 border-b border-stone-800 py-8">
-          <div className="container mx-auto px-4">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center divide-x divide-stone-800/0 md:divide-stone-800">
-              <div className="flex flex-col items-center">
-                <div className="flex items-center gap-1 text-orange-500 mb-1">
-                  <Star className="h-5 w-5 fill-current" /><Star className="h-5 w-5 fill-current" /><Star className="h-5 w-5 fill-current" /><Star className="h-5 w-5 fill-current" /><Star className="h-5 w-5 fill-current" />
+        {/* CÓMO FUNCIONA */}
+        <section className="py-16 bg-stone-900 border-b border-stone-800">
+          <div className="container mx-auto px-4 max-w-5xl">
+            <h2 className="font-oswald text-3xl md:text-4xl font-bold text-white text-center mb-12 uppercase">COTIZA EN 3 SIMPLES PASOS</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-4 relative">
+              <div className="hidden md:block absolute top-[2rem] left-[20%] right-[20%] h-px bg-stone-800 z-0" />
+
+              <div className="flex flex-col items-center text-center relative z-10">
+                <div className="w-16 h-16 rounded-full bg-stone-950 border border-orange-600/50 flex items-center justify-center text-orange-500 mb-6 shadow-[0_0_20px_rgba(234,88,12,0.15)] flex-shrink-0">
+                  <span className="font-oswald text-2xl font-bold">1</span>
                 </div>
-                <p className="text-white font-oswald text-xl font-bold">Servicio Premium</p>
-                <p className="text-stone-500 text-xs uppercase tracking-wider">Calidad Garantizada</p>
+                <h3 className="text-white font-oswald text-xl uppercase mb-3">Tu Evento a Medida</h3>
+                <p className="text-stone-400 text-sm px-2">Selecciona tu plan favorito en nuestro cotizador y añade extras opcionales como el Cordero al Palo.</p>
               </div>
-              <div className="flex flex-col items-center">
-                <CalendarDays className="h-6 w-6 text-orange-600 mb-2" />
-                <p className="text-white font-oswald text-xl font-bold">Varios Eventos</p>
-                <p className="text-stone-500 text-xs uppercase tracking-wider">Realizados con Éxito</p>
+
+              <div className="flex flex-col items-center text-center relative z-10 mt-4 md:mt-0">
+                <div className="w-16 h-16 rounded-full bg-stone-950 border border-orange-600/50 flex items-center justify-center text-orange-500 mb-6 shadow-[0_0_20px_rgba(234,88,12,0.15)] flex-shrink-0">
+                  <span className="font-oswald text-2xl font-bold">2</span>
+                </div>
+                <h3 className="text-white font-oswald text-xl uppercase mb-3">Detalles del Lugar</h3>
+                <p className="text-stone-400 text-sm px-2">Indícanos la fecha de tu asado, la cantidad exacta de invitados y lugar o comuna donde realizaremos el servicio.</p>
               </div>
-              <div className="flex flex-col items-center">
-                <Users className="h-6 w-6 text-orange-600 mb-2" />
-                <p className="text-white font-oswald text-xl font-bold">100% clientes</p>
-                <p className="text-stone-500 text-xs uppercase tracking-wider">Satisfechos</p>
-              </div>
-              <div className="flex flex-col items-center">
-                <MapPin className="h-6 w-6 text-orange-600 mb-2" />
-                <p className="text-white font-oswald text-xl font-bold">3 Regiones</p>
-                <p className="text-stone-500 text-xs uppercase tracking-wider">Cobertura Zona Central</p>
+
+              <div className="flex flex-col items-center text-center relative z-10 mt-4 md:mt-0">
+                <div className="w-16 h-16 rounded-full bg-stone-950 border border-orange-600/50 flex items-center justify-center text-orange-500 mb-6 shadow-[0_0_20px_rgba(234,88,12,0.15)] flex-shrink-0">
+                  <span className="font-oswald text-2xl font-bold">3</span>
+                </div>
+                <h3 className="text-white font-oswald text-xl uppercase mb-3">Presupuesto al Instante</h3>
+                <p className="text-stone-400 text-sm px-2">Obtén el precio y envíanos tu presupuesto directamente a WhatsApp con un solo clic para afinar detalles y reservar.</p>
               </div>
             </div>
           </div>
@@ -178,7 +187,7 @@ function LandingContent() {
             {PLANS.filter(plan => plan.category === "full").map((plan) => (
               <Dialog key={plan.id}>
                 <Card className={`bg-stone-900 border-stone-800 flex flex-col relative transition-all duration-300 hover:border-stone-600 ${plan.recommended ? 'shadow-[0_0_20px_rgba(2,132,199,0.15)] border-sky-600/50 hover:border-sky-500' : ''}`}>
-                  
+
                   {plan.recommended && (
                     <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-10">
                       <Badge className="bg-sky-600 text-white font-bold border-none px-4 uppercase tracking-widest">Recomendado</Badge>
@@ -198,34 +207,34 @@ function LandingContent() {
                           <span className="text-stone-500 text-sm font-medium">/ p/p</span>
                         </div>
                       </div>
-                      
+
                       <ul className="space-y-3 text-sm text-stone-300 mb-4 flex-1">
                         {plan.features.map((feature, idx) => (
                           <li key={idx} className="flex items-start gap-2">
-                            <Check className={`h-4 w-4 shrink-0 mt-0.5 ${plan.id === 'criollo' ? 'text-orange-600' : plan.id === 'total' ? 'text-red-600' : plan.id === 'premium' ? 'text-sky-500' : 'text-yellow-500'}`} /> 
+                            <Check className={`h-4 w-4 shrink-0 mt-0.5 ${plan.id === 'criollo' ? 'text-orange-600' : plan.id === 'total' ? 'text-red-600' : plan.id === 'premium' ? 'text-sky-500' : 'text-yellow-500'}`} />
                             <span dangerouslySetInnerHTML={{ __html: feature.replace("FILETE PREMIUM", "<strong>FILETE PREMIUM</strong>").replace("Punta de Ganso", "<strong>Punta de Ganso</strong>").replace("Buffet Americano (Ensaladas)", "<strong>Buffet Americano (Ensaladas)</strong>") }} />
                           </li>
                         ))}
                       </ul>
-                      
-                      <div className="text-center text-xs font-bold text-stone-500 uppercase tracking-widest mb-4 group-hover:text-orange-500 transition-colors">
-                        [ Ver menú detallado ]
+
+                      <div className="mt-auto pt-4 flex items-center justify-center gap-2 text-xs font-bold text-stone-500 uppercase tracking-widest mb-4 group-hover:text-orange-500 transition-colors">
+                        <span className="border-b border-dashed border-stone-600 group-hover:border-orange-500 pb-0.5">Ver menú y detalles</span>
                       </div>
                     </div>
                   </DialogTrigger>
 
                   <div className="p-6 pt-0 mt-auto">
-                    <Button asChild className={`w-full font-bold uppercase tracking-wider relative z-20 ${plan.id === 'extra_premium' ? 'bg-yellow-600 hover:bg-yellow-700 text-white' : plan.id === 'premium' ? 'bg-sky-600 hover:bg-sky-700 text-white' : 'bg-stone-800 hover:bg-orange-600 text-white'}`}>
-                      <a 
-                        href={`${COTIZAR_URL}&plan=${plan.id}`} 
-                        onClick={(e) => { 
-                          e.stopPropagation(); 
+                    <Button asChild className={`w-full font-bold uppercase tracking-wider relative z-20 ${plan.id === 'extra_premium' ? 'bg-yellow-600 hover:bg-yellow-700 text-white border-none' : plan.id === 'premium' ? 'bg-sky-600 hover:bg-sky-700 text-white border-none' : 'bg-stone-800/80 border border-stone-700 hover:border-orange-600 hover:bg-orange-600 text-white transition-all shadow-sm'}`}>
+                      <a
+                        href={`${COTIZAR_URL}&plan=${plan.id}`}
+                        onClick={(e) => {
+                          e.stopPropagation();
                           trackCotizacion("begin_checkout", {
                             value: plan.pricePerPerson,
                             currency: "CLP",
                             items: [{ item_id: plan.id, item_name: plan.name, price: plan.pricePerPerson }],
                             checkout_origin: "card_button"
-                          }); 
+                          });
                         }}
                       >
                         Cotizar {plan.name}
@@ -233,17 +242,19 @@ function LandingContent() {
                     </Button>
                   </div>
 
-                  <DialogContent className="bg-stone-950 border-stone-800 text-stone-200 max-w-md w-[95vw] rounded-xl overflow-hidden p-0">
-                    <div className={`h-2 w-full ${plan.id === 'criollo' ? 'bg-orange-600' : plan.id === 'total' ? 'bg-red-600' : plan.id === 'premium' ? 'bg-sky-500' : 'bg-yellow-500'}`} />
-                    <div className="p-6">
-                      <DialogHeader className="mb-6 text-left">
+                  <DialogContent className="bg-stone-950 border-stone-800 text-stone-200 max-w-md w-[95vw] rounded-xl overflow-hidden p-0 flex flex-col max-h-[90vh]">
+                    <div className={`h-2 w-full shrink-0 ${plan.id === 'criollo' ? 'bg-orange-600' : plan.id === 'total' ? 'bg-red-600' : plan.id === 'premium' ? 'bg-sky-500' : 'bg-yellow-500'}`} />
+                    <div className="p-6 pb-2 shrink-0">
+                      <DialogHeader className="text-left">
                         <DialogTitle className="font-oswald text-3xl text-white uppercase">{plan.name}</DialogTitle>
                         <DialogDescription className="text-stone-400 text-base">
                           Detalle completo del servicio (${plan.pricePerPerson.toLocaleString("es-CL")} por persona)
                         </DialogDescription>
                       </DialogHeader>
+                    </div>
 
-                      <div className="space-y-6 max-h-[60vh] overflow-y-auto pr-2 custom-scrollbar">
+                    <div className="px-6 py-2 overflow-y-auto custom-scrollbar flex-1">
+                      <div className="space-y-6">
                         <div>
                           <h4 className="flex items-center gap-2 font-oswald text-lg text-white mb-3 uppercase tracking-wider border-b border-stone-800 pb-2">
                             <Beef className="w-5 h-5 text-orange-500" /> Carnes al Fuego
@@ -290,25 +301,25 @@ function LandingContent() {
                           </p>
                         </div>
                       </div>
+                    </div>
 
-                      <div className="mt-8">
-                        <Button asChild className="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold h-12 uppercase tracking-wider">
-                          <a 
-                            href={`${COTIZAR_URL}&plan=${plan.id}`} 
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              trackCotizacion("begin_checkout", {
-                                value: plan.pricePerPerson,
-                                currency: "CLP",
-                                items: [{ item_id: plan.id, item_name: plan.name, price: plan.pricePerPerson }],
-                                checkout_origin: "modal_button"
-                              });
-                            }}
-                          >
-                            Cotizar este plan ahora
-                          </a>
-                        </Button>
-                      </div>
+                    <div className="p-6 pt-5 mt-auto border-t border-stone-800 bg-stone-950/95 backdrop-blur-sm shrink-0 shadow-[0_-10px_20px_rgba(0,0,0,0.5)] z-20">
+                      <Button asChild className="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold h-12 uppercase tracking-wider shadow-lg">
+                        <a
+                          href={`${COTIZAR_URL}&plan=${plan.id}`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            trackCotizacion("begin_checkout", {
+                              value: plan.pricePerPerson,
+                              currency: "CLP",
+                              items: [{ item_id: plan.id, item_name: plan.name, price: plan.pricePerPerson }],
+                              checkout_origin: "modal_button"
+                            });
+                          }}
+                        >
+                          Cotizar este plan
+                        </a>
+                      </Button>
                     </div>
                   </DialogContent>
                 </Card>
@@ -331,9 +342,9 @@ function LandingContent() {
                 <p className="text-stone-300 text-lg mb-8">
                   La preparación tradicional magallánica al asador vertical. Un espectáculo visual y gastronómico para tu evento. Cocción lenta de 4 a 6 horas para lograr una carne que se deshace.
                 </p>
-                <Button asChild size="lg" variant="outline" className="border-orange-600 text-orange-500 hover:bg-orange-600 hover:text-white font-oswald uppercase">
+                <Button asChild size="lg" className="bg-orange-600 hover:bg-orange-700 text-white font-oswald uppercase tracking-wider">
                   <a href={COTIZAR_URL} onClick={() => trackCotizacion("generate_lead", { lead_source: "cordero_banner" })}>
-                    AGREGAR A MI EVENTO
+                    AÑADIR A MI COTIZACIÓN
                   </a>
                 </Button>
               </div>
