@@ -5,6 +5,7 @@ import { Analytics } from "@vercel/analytics/react";
 // 2. IMPORTAR COMPONENTE SCRIPT
 import Script from "next/script";
 import "./globals.css";
+import GlobalAdminModal from "@/components/cotizador/GlobalAdminModal";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const oswald = Oswald({ subsets: ["latin"], variable: "--font-oswald" });
@@ -123,9 +124,9 @@ export default function RootLayout({
 
   return (
     <html lang="es" className="dark scroll-smooth">
-      <body
-        className={`${inter.variable} ${oswald.variable} antialiased bg-stone-950 text-stone-50`}
-      >
+      <body className={`${inter.variable} ${oswald.variable} antialiased bg-stone-950 text-stone-50`}>
+        <GlobalAdminModal />
+
         {/* --- GOOGLE ANALYTICS (GA4) --- */}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-9R8YFVJTJD"
@@ -142,8 +143,7 @@ export default function RootLayout({
             // - Asegura que los enlaces al cotizador no rompan la sesión.
             gtag('config', 'G-9R8YFVJTJD', {
               page_path: window.location.pathname,
-              send_page_view: true,
-              cookie_flags: 'SameSite=None;Secure' // Crucial para que GA4 reconozca al usuario cuando pase de .cl a .web.app
+              send_page_view: true
             });
           `}
         </Script>

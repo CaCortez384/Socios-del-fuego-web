@@ -2,8 +2,6 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Suspense } from "react";
-import { useSearchParams } from "next/navigation";
 import {
   Flame,
   Check,
@@ -46,18 +44,14 @@ import {
 import Image from "next/image";
 
 import { trackCotizacion } from "@/lib/utils";
-import { PLANS } from "@/lib/plans";
+import LogoLink from "@/components/cotizador/LogoLink";
+import { usePlans } from "@/hooks/usePlans";
 
-// Este es el componente principal que contiene toda la lógica y la UI de la landing
-function LandingContent() {
-  const searchParams = useSearchParams();
-  const queryString = searchParams.toString();
+const COTIZAR_URL = "/cotizar";
 
-  // MAGIA DEL CROSS-DOMAIN: Mantiene vivo el fbclid de Meta o UTMs de Analytics
-  const COTIZAR_URL = queryString
-    ? `https://socios-del-fuego.web.app/?v=cotizar&${queryString}`
-    : `https://socios-del-fuego.web.app/?v=cotizar`;
-
+export default function Page() {
+  const { plans: PLANS, loadingPlans } = usePlans();
+  
   const fadeInUp = {
     hidden: { opacity: 0, y: 30 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
@@ -68,19 +62,7 @@ function LandingContent() {
       {/* A. NAVBAR */}
       <nav className="sticky top-0 z-50 w-full border-b border-stone-800 bg-stone-950/90 backdrop-blur-md">
         <div className="container mx-auto flex h-20 items-center justify-between px-4">
-          <div className="flex items-center gap-2">
-            <div className="relative h-10 w-10 overflow-hidden rounded-full border border-orange-600/20">
-              <Image
-                src="/logo.webp"
-                alt="Logo Socios del Fuego"
-                fill
-                className="object-cover"
-              />
-            </div>
-            <span className="font-oswald text-xl font-bold tracking-wide text-white uppercase">
-              Socios del Fuego
-            </span>
-          </div>
+          <LogoLink />
 
           <div className="hidden md:flex items-center gap-8 text-sm font-medium text-stone-400">
             <Link href="#experiencias" className="hover:text-orange-500 transition-colors">Planes</Link>
@@ -90,7 +72,7 @@ function LandingContent() {
           </div>
 
           <Button asChild className="bg-orange-600 hover:bg-orange-700 text-white font-bold tracking-wider">
-            <a href={COTIZAR_URL} onClick={() => trackCotizacion("generate_lead", { lead_source: "navbar" })}>COTIZAR</a>
+            <Link href={COTIZAR_URL} onClick={() => trackCotizacion("generate_lead", { lead_source: "navbar" })}>COTIZAR</Link>
           </Button>
         </div>
       </nav>
@@ -132,9 +114,9 @@ function LandingContent() {
 
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                 <Button asChild size="lg" className="bg-orange-600 hover:bg-orange-700 text-white text-lg px-10 py-8 h-auto font-oswald uppercase tracking-wider shadow-[0_0_30px_rgba(234,88,12,0.4)] animate-pulse">
-                  <a href={COTIZAR_URL} onClick={() => trackCotizacion("generate_lead", { lead_source: "hero" })}>
+                  <Link href={COTIZAR_URL} onClick={() => trackCotizacion("generate_lead", { lead_source: "hero" })}>
                     Cotizar Disponibilidad
-                  </a>
+                  </Link>
                 </Button>
               </motion.div>
             </motion.div>
@@ -183,8 +165,14 @@ function LandingContent() {
             <p className="mt-4 text-stone-400">Haz clic en cualquier plan para ver el menú detallado.</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-12">
-            {PLANS.filter(plan => plan.category === "full").map((plan) => (
+          {loadingPlans ? (
+            <div className="flex justify-center items-center py-20 animate-pulse flex-col space-y-4">
+               <div className="w-12 h-12 border-4 border-stone-800 border-t-orange-500 rounded-full animate-spin"></div>
+               <p className="text-stone-500 text-sm font-bold uppercase tracking-widest">Cargando menús...</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-12">
+              {PLANS.filter(plan => plan.category === "full").map((plan) => (
               <Dialog key={plan.id}>
                 <Card className={`bg-stone-900 border-stone-800 flex flex-col relative transition-all duration-300 hover:border-stone-600 ${plan.recommended ? 'shadow-[0_0_20px_rgba(2,132,199,0.15)] border-sky-600/50 hover:border-sky-500' : ''}`}>
 
@@ -225,8 +213,8 @@ function LandingContent() {
 
                   <div className="p-6 pt-0 mt-auto">
                     <Button asChild className={`w-full font-bold uppercase tracking-wider relative z-20 ${plan.id === 'extra_premium' ? 'bg-yellow-600 hover:bg-yellow-700 text-white border-none' : plan.id === 'premium' ? 'bg-sky-600 hover:bg-sky-700 text-white border-none' : 'bg-stone-800/80 border border-stone-700 hover:border-orange-600 hover:bg-orange-600 text-white transition-all shadow-sm'}`}>
-                      <a
-                        href={`${COTIZAR_URL}&plan=${plan.id}`}
+                      <Link
+                        href={`${COTIZAR_URL}?plan=${plan.id}`}
                         onClick={(e) => {
                           e.stopPropagation();
                           trackCotizacion("begin_checkout", {
@@ -238,7 +226,7 @@ function LandingContent() {
                         }}
                       >
                         Cotizar {plan.name}
-                      </a>
+                      </Link>
                     </Button>
                   </div>
 
@@ -305,8 +293,8 @@ function LandingContent() {
 
                     <div className="p-6 pt-5 mt-auto border-t border-stone-800 bg-stone-950/95 backdrop-blur-sm shrink-0 shadow-[0_-10px_20px_rgba(0,0,0,0.5)] z-20">
                       <Button asChild className="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold h-12 uppercase tracking-wider shadow-lg">
-                        <a
-                          href={`${COTIZAR_URL}&plan=${plan.id}`}
+                        <Link
+                          href={`${COTIZAR_URL}?plan=${plan.id}`}
                           onClick={(e) => {
                             e.stopPropagation();
                             trackCotizacion("begin_checkout", {
@@ -318,14 +306,15 @@ function LandingContent() {
                           }}
                         >
                           Cotizar este plan
-                        </a>
+                        </Link>
                       </Button>
                     </div>
                   </DialogContent>
                 </Card>
               </Dialog>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </section>
 
         {/* D. SECCIÓN ESPECIAL: CORDERO AL PALO */}
@@ -343,9 +332,9 @@ function LandingContent() {
                   La preparación tradicional magallánica al asador vertical. Un espectáculo visual y gastronómico para tu evento. Cocción lenta de 4 a 6 horas para lograr una carne que se deshace.
                 </p>
                 <Button asChild size="lg" className="bg-orange-600 hover:bg-orange-700 text-white font-oswald uppercase tracking-wider">
-                  <a href={COTIZAR_URL} onClick={() => trackCotizacion("generate_lead", { lead_source: "cordero_banner" })}>
+                  <Link href={COTIZAR_URL} onClick={() => trackCotizacion("generate_lead", { lead_source: "cordero_banner" })}>
                     AÑADIR A MI COTIZACIÓN
-                  </a>
+                  </Link>
                 </Button>
               </div>
 
@@ -456,14 +445,5 @@ function LandingContent() {
         </div>
       </footer>
     </div>
-  );
-}
-
-// Este es el export default que Next.js espera, envuelto en Suspense
-export default function Page() {
-  return (
-    <Suspense fallback={<div className="min-h-screen bg-stone-950" />}>
-      <LandingContent />
-    </Suspense>
   );
 }

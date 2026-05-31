@@ -13,7 +13,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'weekly',
       priority: 1,
     },
-    // Aquí puedes agregar tus rutas del blog si quieres, pero con esto basta para que compile
+    {
+      url: `${BASE_URL}/cotizar`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.9,
+    },
     {
       url: `${BASE_URL}/blog`,
       lastModified: new Date(),

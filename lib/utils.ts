@@ -42,14 +42,44 @@ export const trackCotizacion = (eventName: string, payload: AnalyticsEventPayloa
 
   // 2. Meta Pixel
   if (typeof window.fbq === "function") {
-    let fbEvent = "Lead";
+    let fbEvent = "Lead"; // Fallback default
     let fbPayload: Record<string, unknown> = {};
 
-    if (eventName === "begin_checkout") {
+    if (eventName === "page_view") {
+      fbEvent = "PageView";
+    }
+    else if (eventName === "select_item") {
+      fbEvent = "ViewContent";
+      fbPayload = {
+        content_name: payload.items?.[0]?.item_name || "Plan de Asado",
+        content_ids: payload.items?.map((item) => item.item_id) || [],
+        content_type: "product",
+      };
+    }
+    else if (eventName === "add_to_cart") {
+      fbEvent = "AddToCart";
+      fbPayload = {
+        content_name: payload.items?.[0]?.item_name || "Plan de Asado",
+        content_ids: payload.items?.map((item) => item.item_id) || [],
+        content_type: "product",
+        value: payload.value,
+        currency: payload.currency || "CLP",
+      };
+    }
+    else if (eventName === "purchase") {
+      fbEvent = "Purchase";
+      fbPayload = {
+        content_name: payload.items?.[0]?.item_name || "Plan de Asado",
+        content_ids: payload.items?.map((item) => item.item_id) || [],
+        content_type: "product",
+        value: payload.value,
+        currency: payload.currency || "CLP",
+      };
+    }
+    else if (eventName === "begin_checkout") {
       fbEvent = "InitiateCheckout";
       fbPayload = {
         content_name: payload.items?.[0]?.item_name || "Plan de Asado",
-        // TypeScript ahora sabe que 'item' tiene la propiedad 'item_id' gracias a la interfaz
         content_ids: payload.items?.map((item) => item.item_id) || [],
         content_type: "product",
         value: payload.value,
@@ -63,8 +93,19 @@ export const trackCotizacion = (eventName: string, payload: AnalyticsEventPayloa
         content_category: payload.lead_source || "general",
       };
     }
+    else if (eventName === "remove_from_cart" || eventName === "add_shipping_info" || eventName === "share") {
+      // These don't necessarily need a strict standard Facebook mapping, or we can just send them as custom events
+      fbEvent = eventName;
+      fbPayload = payload;
+    }
 
-    window.fbq("track", fbEvent, fbPayload);
+    // Call standard track or trackCustom based on event name
+    const standardEvents = ["PageView", "ViewContent", "AddToCart", "Purchase", "InitiateCheckout", "Lead", "CompleteRegistration"];
+    if (standardEvents.includes(fbEvent)) {
+      window.fbq("track", fbEvent, Object.keys(fbPayload).length > 0 ? fbPayload : undefined);
+    } else {
+      window.fbq("trackCustom", fbEvent, fbPayload);
+    }
   } else {
     console.warn("Meta Pixel no está cargado o fue bloqueado por el navegador.");
   }
