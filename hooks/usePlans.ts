@@ -20,9 +20,9 @@ export function usePlans() {
           return;
         }
 
-        const fetchedPlans: any[] = [];
+        const fetchedPlans: (typeof FALLBACK_PLANS[number] & { id: string })[] = [];
         querySnapshot.forEach((doc) => {
-          fetchedPlans.push({ id: doc.id, ...doc.data() });
+          fetchedPlans.push({ id: doc.id, ...doc.data() } as typeof FALLBACK_PLANS[number] & { id: string });
         });
 
         // Ordenamos por categoría (primero full, luego cocktail) y luego por priceLevel

@@ -11,10 +11,13 @@ export default function AdminLoginModal({ isOpen, onClose, onLogin }) {
 
   useEffect(() => {
     if (isOpen) {
-      setLoading(false);
-      setError(null);
-      setUsername('');
-      setPassword('');
+      const timer = setTimeout(() => {
+        setLoading(false);
+        setError(null);
+        setUsername('');
+        setPassword('');
+      }, 0);
+      return () => clearTimeout(timer);
     }
   }, [isOpen]);
 
@@ -27,7 +30,7 @@ export default function AdminLoginModal({ isOpen, onClose, onLogin }) {
 
     try {
       await onLogin(username, password);
-    } catch (err) {
+    } catch {
       setError("Clave incorrecta o socio no reconocido");
       setLoading(false);
     }
