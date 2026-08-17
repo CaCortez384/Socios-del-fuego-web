@@ -105,7 +105,7 @@ export default function Page() {
                 <span className="text-orange-600">EN SANTIAGO, V Y VI REGIÓN</span>
               </h1>
 
-              <p className="text-lg md:text-2xl text-stone-300 mb-6 max-w-3xl mx-auto font-light border-l-4 border-orange-600 pl-4 md:pl-0 md:border-l-0">
+              <p className="text-lg md:text-2xl text-stone-100 mb-6 max-w-3xl mx-auto font-light border-l-4 border-orange-600 pl-4 md:pl-0 md:border-l-0">
                 Especialistas en Matrimonios Campestres, Eventos de Empresa y Celebraciones Privadas.
               </p>
 
