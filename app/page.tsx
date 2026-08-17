@@ -51,7 +51,7 @@ const COTIZAR_URL = "/cotizar";
 
 export default function Page() {
   const { plans: PLANS, loadingPlans } = usePlans();
-  
+
   const fadeInUp = {
     hidden: { opacity: 0, y: 30 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
@@ -95,9 +95,6 @@ export default function Page() {
           <div className="relative z-10 container px-4 text-center">
             <motion.div initial="hidden" animate="visible" variants={fadeInUp} className="flex flex-col items-center">
               <div className="flex flex-col md:flex-row gap-3 items-center justify-center mb-6">
-                <Badge variant="outline" className="border-orange-600/50 text-orange-500 px-4 py-1 tracking-widest uppercase bg-stone-950/50 backdrop-blur-sm">
-                  Melipilla • Santiago • V y VI Región
-                </Badge>
                 <Badge className="bg-orange-600 hover:bg-orange-500 text-white px-4 py-1 tracking-widest uppercase font-bold animate-pulse shadow-[0_0_15px_rgba(234,88,12,0.3)]">
                   🔥 Temporada Alta: Últimas fechas
                 </Badge>
@@ -108,9 +105,17 @@ export default function Page() {
                 <span className="text-orange-600">EN SANTIAGO, V Y VI REGIÓN</span>
               </h1>
 
-              <p className="text-lg md:text-2xl text-stone-300 mb-10 max-w-3xl mx-auto font-light border-l-4 border-orange-600 pl-4 md:pl-0 md:border-l-0">
+              <p className="text-lg md:text-2xl text-stone-300 mb-6 max-w-3xl mx-auto font-light border-l-4 border-orange-600 pl-4 md:pl-0 md:border-l-0">
                 Especialistas en Matrimonios Campestres, Eventos de Empresa y Celebraciones Privadas.
               </p>
+
+              <div className="flex items-center justify-center gap-4 mb-10">
+                <div className="h-px w-12 bg-orange-600/50 hidden md:block"></div>
+                <p className="text-xl md:text-2xl font-oswald text-orange-400 font-bold uppercase tracking-widest">
+                  Desde $23.000 p/p
+                </p>
+                <div className="h-px w-12 bg-orange-600/50 hidden md:block"></div>
+              </div>
 
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                 <Button asChild size="lg" className="bg-orange-600 hover:bg-orange-700 text-white text-lg px-10 py-8 h-auto font-oswald uppercase tracking-wider shadow-[0_0_30px_rgba(234,88,12,0.4)] animate-pulse">
@@ -167,132 +172,52 @@ export default function Page() {
 
           {loadingPlans ? (
             <div className="flex justify-center items-center py-20 animate-pulse flex-col space-y-4">
-               <div className="w-12 h-12 border-4 border-stone-800 border-t-orange-500 rounded-full animate-spin"></div>
-               <p className="text-stone-500 text-sm font-bold uppercase tracking-widest">Cargando menús...</p>
+              <div className="w-12 h-12 border-4 border-stone-800 border-t-orange-500 rounded-full animate-spin"></div>
+              <p className="text-stone-500 text-sm font-bold uppercase tracking-widest">Cargando menús...</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-12">
               {PLANS.filter(plan => plan.category === "full").map((plan) => (
-              <Dialog key={plan.id}>
-                <Card className={`bg-stone-900 border-stone-800 flex flex-col relative transition-all duration-300 hover:border-stone-600 ${plan.recommended ? 'shadow-[0_0_20px_rgba(2,132,199,0.15)] border-sky-600/50 hover:border-sky-500' : ''}`}>
+                <Dialog key={plan.id}>
+                  <Card className={`bg-stone-900 border-stone-800 flex flex-col relative transition-all duration-300 hover:border-stone-600 ${plan.recommended ? 'shadow-[0_0_20px_rgba(2,132,199,0.15)] border-sky-600/50 hover:border-sky-500' : ''}`}>
 
-                  {plan.recommended && (
-                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-10">
-                      <Badge className="bg-sky-600 text-white font-bold border-none px-4 uppercase tracking-widest">Recomendado</Badge>
-                    </div>
-                  )}
-                  {plan.id === "extra_premium" && (
-                    <div className="absolute top-0 right-0 bg-yellow-600 text-white text-[10px] font-bold px-2 py-1 uppercase z-10">Lujo</div>
-                  )}
-
-                  <DialogTrigger asChild>
-                    <div className="cursor-pointer group flex-1 flex flex-col p-6 pb-0 outline-none">
-                      <div className="pb-4">
-                        <h3 className="font-oswald text-2xl text-white font-semibold leading-none tracking-tight group-hover:text-orange-400 transition-colors">{plan.name}</h3>
-                        <p className="text-stone-400 mt-1 text-sm">{plan.totalWeight}</p>
-                        <div className="mt-4 flex items-baseline gap-1">
-                          <span className="text-3xl font-bold text-white">${plan.pricePerPerson.toLocaleString("es-CL")}</span>
-                          <span className="text-stone-500 text-sm font-medium">/ p/p</span>
-                        </div>
+                    {plan.recommended && (
+                      <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-10">
+                        <Badge className="bg-sky-600 text-white font-bold border-none px-4 uppercase tracking-widest">Recomendado</Badge>
                       </div>
+                    )}
+                    {plan.id === "extra_premium" && (
+                      <div className="absolute top-0 right-0 bg-yellow-600 text-white text-[10px] font-bold px-2 py-1 uppercase z-10">Lujo</div>
+                    )}
 
-                      <ul className="space-y-3 text-sm text-stone-300 mb-4 flex-1">
-                        {plan.features.map((feature, idx) => (
-                          <li key={idx} className="flex items-start gap-2">
-                            <Check className={`h-4 w-4 shrink-0 mt-0.5 ${plan.id === 'criollo' ? 'text-orange-600' : plan.id === 'total' ? 'text-red-600' : plan.id === 'premium' ? 'text-sky-500' : 'text-yellow-500'}`} />
-                            <span dangerouslySetInnerHTML={{ __html: feature.replace("FILETE PREMIUM", "<strong>FILETE PREMIUM</strong>").replace("Punta de Ganso", "<strong>Punta de Ganso</strong>").replace("Buffet Americano (Ensaladas)", "<strong>Buffet Americano (Ensaladas)</strong>") }} />
-                          </li>
-                        ))}
-                      </ul>
-
-                      <div className="mt-auto pt-4 flex items-center justify-center gap-2 text-xs font-bold text-stone-500 uppercase tracking-widest mb-4 group-hover:text-orange-500 transition-colors">
-                        <span className="border-b border-dashed border-stone-600 group-hover:border-orange-500 pb-0.5">Ver menú y detalles</span>
-                      </div>
-                    </div>
-                  </DialogTrigger>
-
-                  <div className="p-6 pt-0 mt-auto">
-                    <Button asChild className={`w-full font-bold uppercase tracking-wider relative z-20 ${plan.id === 'extra_premium' ? 'bg-yellow-600 hover:bg-yellow-700 text-white border-none' : plan.id === 'premium' ? 'bg-sky-600 hover:bg-sky-700 text-white border-none' : 'bg-stone-800/80 border border-stone-700 hover:border-orange-600 hover:bg-orange-600 text-white transition-all shadow-sm'}`}>
-                      <Link
-                        href={`${COTIZAR_URL}?plan=${plan.id}`}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          trackCotizacion("begin_checkout", {
-                            value: plan.pricePerPerson,
-                            currency: "CLP",
-                            items: [{ item_id: plan.id, item_name: plan.name, price: plan.pricePerPerson }],
-                            checkout_origin: "card_button"
-                          });
-                        }}
-                      >
-                        Cotizar {plan.name}
-                      </Link>
-                    </Button>
-                  </div>
-
-                  <DialogContent className="bg-stone-950 border-stone-800 text-stone-200 max-w-md w-[95vw] rounded-xl overflow-hidden p-0 flex flex-col max-h-[90vh]">
-                    <div className={`h-2 w-full shrink-0 ${plan.id === 'criollo' ? 'bg-orange-600' : plan.id === 'total' ? 'bg-red-600' : plan.id === 'premium' ? 'bg-sky-500' : 'bg-yellow-500'}`} />
-                    <div className="p-6 pb-2 shrink-0">
-                      <DialogHeader className="text-left">
-                        <DialogTitle className="font-oswald text-3xl text-white uppercase">{plan.name}</DialogTitle>
-                        <DialogDescription className="text-stone-400 text-base">
-                          Detalle completo del servicio (${plan.pricePerPerson.toLocaleString("es-CL")} por persona)
-                        </DialogDescription>
-                      </DialogHeader>
-                    </div>
-
-                    <div className="px-6 py-2 overflow-y-auto custom-scrollbar flex-1">
-                      <div className="space-y-6">
-                        <div>
-                          <h4 className="flex items-center gap-2 font-oswald text-lg text-white mb-3 uppercase tracking-wider border-b border-stone-800 pb-2">
-                            <Beef className="w-5 h-5 text-orange-500" /> Carnes al Fuego
-                          </h4>
-                          <ul className="space-y-2 text-sm text-stone-300">
-                            {plan.fullMenu.carnes.map((item, i) => (
-                              <li key={i} className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-orange-500/50" /> {item}</li>
-                            ))}
-                          </ul>
-                        </div>
-
-                        {plan.fullMenu.picoteo && (
-                          <div>
-                            <h4 className="flex items-center gap-2 font-oswald text-lg text-white mb-3 uppercase tracking-wider border-b border-stone-800 pb-2">
-                              <Flame className="w-5 h-5 text-orange-500" /> Para Picar
-                            </h4>
-                            <ul className="space-y-2 text-sm text-stone-300">
-                              {plan.fullMenu.picoteo.map((item, i) => (
-                                <li key={i} className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-orange-500/50" /> {item}</li>
-                              ))}
-                            </ul>
+                    <DialogTrigger asChild>
+                      <div className="cursor-pointer group flex-1 flex flex-col p-6 pb-0 outline-none">
+                        <div className="pb-4">
+                          <h3 className="font-oswald text-2xl text-white font-semibold leading-none tracking-tight group-hover:text-orange-400 transition-colors">{plan.name}</h3>
+                          <p className="text-stone-400 mt-1 text-sm">{plan.totalWeight}</p>
+                          <div className="mt-4 flex items-baseline gap-1">
+                            <span className="text-3xl font-bold text-white">${plan.pricePerPerson.toLocaleString("es-CL")}</span>
+                            <span className="text-stone-500 text-sm font-medium">/ p/p</span>
                           </div>
-                        )}
+                        </div>
 
-                        {plan.fullMenu.ensaladas && (
-                          <div>
-                            <h4 className="flex items-center gap-2 font-oswald text-lg text-white mb-3 uppercase tracking-wider border-b border-stone-800 pb-2">
-                              <Salad className="w-5 h-5 text-orange-500" /> Acompañamientos
-                            </h4>
-                            <ul className="space-y-2 text-sm text-stone-300">
-                              {plan.fullMenu.ensaladas.map((item, i) => (
-                                <li key={i} className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-orange-500/50" /> {item}</li>
-                              ))}
-                            </ul>
-                          </div>
-                        )}
+                        <ul className="space-y-3 text-sm text-stone-300 mb-4 flex-1">
+                          {plan.features.map((feature, idx) => (
+                            <li key={idx} className="flex items-start gap-2">
+                              <Check className={`h-4 w-4 shrink-0 mt-0.5 ${plan.id === 'criollo' ? 'text-orange-600' : plan.id === 'total' ? 'text-red-600' : plan.id === 'premium' ? 'text-sky-500' : 'text-yellow-500'}`} />
+                              <span dangerouslySetInnerHTML={{ __html: feature.replace("FILETE PREMIUM", "<strong>FILETE PREMIUM</strong>").replace("Punta de Ganso", "<strong>Punta de Ganso</strong>").replace("Buffet Americano (Ensaladas)", "<strong>Buffet Americano (Ensaladas)</strong>") }} />
+                            </li>
+                          ))}
+                        </ul>
 
-                        <div>
-                          <h4 className="flex items-center gap-2 font-oswald text-lg text-white mb-3 uppercase tracking-wider border-b border-stone-800 pb-2">
-                            <Utensils className="w-5 h-5 text-orange-500" /> Servicio Incluido
-                          </h4>
-                          <p className="text-sm text-stone-300 bg-stone-900 p-3 rounded-lg border border-stone-800/50 leading-relaxed">
-                            {plan.fullMenu.servicio}
-                          </p>
+                        <div className="mt-auto pt-4 flex items-center justify-center gap-2 text-xs font-bold text-stone-500 uppercase tracking-widest mb-4 group-hover:text-orange-500 transition-colors">
+                          <span className="border-b border-dashed border-stone-600 group-hover:border-orange-500 pb-0.5">Ver menú y detalles</span>
                         </div>
                       </div>
-                    </div>
+                    </DialogTrigger>
 
-                    <div className="p-6 pt-5 mt-auto border-t border-stone-800 bg-stone-950/95 backdrop-blur-sm shrink-0 shadow-[0_-10px_20px_rgba(0,0,0,0.5)] z-20">
-                      <Button asChild className="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold h-12 uppercase tracking-wider shadow-lg">
+                    <div className="p-6 pt-0 mt-auto">
+                      <Button asChild className={`w-full font-bold uppercase tracking-wider relative z-20 ${plan.id === 'extra_premium' ? 'bg-yellow-600 hover:bg-yellow-700 text-white border-none' : plan.id === 'premium' ? 'bg-sky-600 hover:bg-sky-700 text-white border-none' : 'bg-stone-800/80 border border-stone-700 hover:border-orange-600 hover:bg-orange-600 text-white transition-all shadow-sm'}`}>
                         <Link
                           href={`${COTIZAR_URL}?plan=${plan.id}`}
                           onClick={(e) => {
@@ -301,17 +226,97 @@ export default function Page() {
                               value: plan.pricePerPerson,
                               currency: "CLP",
                               items: [{ item_id: plan.id, item_name: plan.name, price: plan.pricePerPerson }],
-                              checkout_origin: "modal_button"
+                              checkout_origin: "card_button"
                             });
                           }}
                         >
-                          Cotizar este plan
+                          Cotizar {plan.name}
                         </Link>
                       </Button>
                     </div>
-                  </DialogContent>
-                </Card>
-              </Dialog>
+
+                    <DialogContent className="bg-stone-950 border-stone-800 text-stone-200 max-w-md w-[95vw] rounded-xl overflow-hidden p-0 flex flex-col max-h-[90vh]">
+                      <div className={`h-2 w-full shrink-0 ${plan.id === 'criollo' ? 'bg-orange-600' : plan.id === 'total' ? 'bg-red-600' : plan.id === 'premium' ? 'bg-sky-500' : 'bg-yellow-500'}`} />
+                      <div className="p-6 pb-2 shrink-0">
+                        <DialogHeader className="text-left">
+                          <DialogTitle className="font-oswald text-3xl text-white uppercase">{plan.name}</DialogTitle>
+                          <DialogDescription className="text-stone-400 text-base">
+                            Detalle completo del servicio (${plan.pricePerPerson.toLocaleString("es-CL")} por persona)
+                          </DialogDescription>
+                        </DialogHeader>
+                      </div>
+
+                      <div className="px-6 py-2 overflow-y-auto custom-scrollbar flex-1">
+                        <div className="space-y-6">
+                          <div>
+                            <h4 className="flex items-center gap-2 font-oswald text-lg text-white mb-3 uppercase tracking-wider border-b border-stone-800 pb-2">
+                              <Beef className="w-5 h-5 text-orange-500" /> Carnes al Fuego
+                            </h4>
+                            <ul className="space-y-2 text-sm text-stone-300">
+                              {plan.fullMenu.carnes.map((item, i) => (
+                                <li key={i} className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-orange-500/50" /> {item}</li>
+                              ))}
+                            </ul>
+                          </div>
+
+                          {plan.fullMenu.picoteo && (
+                            <div>
+                              <h4 className="flex items-center gap-2 font-oswald text-lg text-white mb-3 uppercase tracking-wider border-b border-stone-800 pb-2">
+                                <Flame className="w-5 h-5 text-orange-500" /> Para Picar
+                              </h4>
+                              <ul className="space-y-2 text-sm text-stone-300">
+                                {plan.fullMenu.picoteo.map((item, i) => (
+                                  <li key={i} className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-orange-500/50" /> {item}</li>
+                                ))}
+                              </ul>
+                            </div>
+                          )}
+
+                          {plan.fullMenu.ensaladas && (
+                            <div>
+                              <h4 className="flex items-center gap-2 font-oswald text-lg text-white mb-3 uppercase tracking-wider border-b border-stone-800 pb-2">
+                                <Salad className="w-5 h-5 text-orange-500" /> Acompañamientos
+                              </h4>
+                              <ul className="space-y-2 text-sm text-stone-300">
+                                {plan.fullMenu.ensaladas.map((item, i) => (
+                                  <li key={i} className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-orange-500/50" /> {item}</li>
+                                ))}
+                              </ul>
+                            </div>
+                          )}
+
+                          <div>
+                            <h4 className="flex items-center gap-2 font-oswald text-lg text-white mb-3 uppercase tracking-wider border-b border-stone-800 pb-2">
+                              <Utensils className="w-5 h-5 text-orange-500" /> Servicio Incluido
+                            </h4>
+                            <p className="text-sm text-stone-300 bg-stone-900 p-3 rounded-lg border border-stone-800/50 leading-relaxed">
+                              {plan.fullMenu.servicio}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="p-6 pt-5 mt-auto border-t border-stone-800 bg-stone-950/95 backdrop-blur-sm shrink-0 shadow-[0_-10px_20px_rgba(0,0,0,0.5)] z-20">
+                        <Button asChild className="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold h-12 uppercase tracking-wider shadow-lg">
+                          <Link
+                            href={`${COTIZAR_URL}?plan=${plan.id}`}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              trackCotizacion("begin_checkout", {
+                                value: plan.pricePerPerson,
+                                currency: "CLP",
+                                items: [{ item_id: plan.id, item_name: plan.name, price: plan.pricePerPerson }],
+                                checkout_origin: "modal_button"
+                              });
+                            }}
+                          >
+                            Cotizar este plan
+                          </Link>
+                        </Button>
+                      </div>
+                    </DialogContent>
+                  </Card>
+                </Dialog>
               ))}
             </div>
           )}

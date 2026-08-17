@@ -3,8 +3,6 @@
 import { useState } from "react";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
-import { collection, doc, setDoc, serverTimestamp } from "firebase/firestore";
-import { db } from "@/lib/firebase";
 
 import {
   MessageCircle,
@@ -21,9 +19,6 @@ import {
   Send,
   ChevronDown,
   ChevronUp,
-  Share2,
-  Loader2,
-  Copy,
 } from "lucide-react";
 import { CONTACT_INFO, CORDERO_DATA } from "@/lib/plans";
 import { trackCotizacion } from "@/lib/utils";
@@ -38,7 +33,6 @@ export default function StepSummary({
 }) {
   const [userDoubt, setUserDoubt] = useState("");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [showToast, setShowToast] = useState(false);
 
   const numGuests = parseInt(guests, 10) || 0;
   const planTotal = numGuests * (selectedPlan?.pricePerPerson || 0);
@@ -56,54 +50,6 @@ export default function StepSummary({
   const totalLabel = isCustomTransport ? "TOTAL (Sin traslado)" : "TOTAL WEB";
   const cleanPhone = CONTACT_INFO.phone.replace(/[^0-9]/g, "");
 
-  const [isSharing, setIsSharing] = useState(false);
-
-  const handleShare = () => {
-    setIsSharing(true);
-
-    try {
-      const quoteRef = doc(collection(db, "shared_quotes"));
-      // Updated to use unified domain
-      const uniqueLink = `https://sociosdelfuego.cl/cotizar?quote=${quoteRef.id}`;
-
-      const quoteData = {
-        date: date ? date.toISOString() : null,
-        guests: numGuests,
-        location: selectedLocation,
-        planId: selectedPlan?.id,
-        wantsCordero: wantsCordero,
-        totalValue: grandTotal,
-        createdAt: serverTimestamp(),
-      };
-
-      setDoc(quoteRef, quoteData).catch((err) => console.error("Error background:", err));
-
-      trackCotizacion("share", {
-        method: "firestore_link",
-        content_type: "quote",
-        item_id: selectedPlan?.id,
-      });
-
-      const shareText = `🔥 Cotización Socios del Fuego\n\n📅 Fecha: ${formattedDate}\n👥 Invitados: ${numGuests}\n📍 Lugar: ${locationName}\n🍖 Plan: ${selectedPlan?.name}\n💰 Total: $${grandTotal.toLocaleString("es-CL")}\n\nRevisa el detalle completo de mi evento aquí:\n${uniqueLink}`;
-
-      if (navigator.share) {
-        navigator.share({
-          title: "Cotización Socios del Fuego",
-          text: shareText,
-        }).catch((err) => {
-          console.log("El usuario canceló o el navegador bloqueó el share nativo:", err);
-        });
-      } else {
-        navigator.clipboard.writeText(shareText);
-        setShowToast(true);
-        setTimeout(() => setShowToast(false), 4000);
-      }
-    } catch (error) {
-      console.error("Error crítico en share:", error);
-    } finally {
-      setIsSharing(false);
-    }
-  };
 
   const printStyles = `
     @page { size: auto; margin: 0mm; }
@@ -140,19 +86,6 @@ export default function StepSummary({
     <div className="animate-in fade-in slide-in-from-right-8 duration-500 pb-40 md:pb-10 relative">
       <style>{printStyles}</style>
 
-      {/* TOAST NOTIFICATION ELEGANTE */}
-      {showToast && (
-        <div className="fixed top-24 left-1/2 transform -translate-x-1/2 z-[100] w-[90%] max-w-sm bg-stone-800 border border-stone-700 shadow-2xl rounded-2xl p-4 flex items-start gap-3 animate-in slide-in-from-top-10 fade-in duration-300">
-          <div className="bg-green-500/20 p-2 rounded-full shrink-0 mt-0.5">
-            <CheckCircle className="text-green-500" size={18} />
-          </div>
-          <div className="flex flex-col">
-            <p className="text-white font-bold text-sm">¡Copiado al portapapeles!</p>
-            <p className="text-stone-400 text-xs mt-1">El resumen de tu evento está listo. Ya puedes pegarlo en cualquier lugar para compartir.</p>
-          </div>
-        </div>
-      )}
-
       {/* HEADER WEB */}
       <div className="flex flex-col items-center gap-3 mb-8 text-center no-print">
         <div className="w-16 h-16 bg-green-500/10 rounded-full flex items-center justify-center border border-green-500/30">
@@ -165,21 +98,6 @@ export default function StepSummary({
           <p className="text-stone-400 text-sm">Tu parrilla está casi lista.</p>
         </div>
 
-        <button
-          onClick={handleShare}
-          disabled={isSharing}
-          className="mt-2 bg-stone-800/80 hover:bg-stone-700 text-stone-300 text-sm font-bold py-2.5 px-6 rounded-full flex items-center justify-center gap-2 transition-all border border-stone-700 shadow-md active:scale-95 no-print disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          {isSharing ? (
-            <>
-              <Loader2 size={18} className="animate-spin text-orange-500" /> Generando Enlace...
-            </>
-          ) : (
-            <>
-              <Share2 size={18} /> Compartir Resumen
-            </>
-          )}
-        </button>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
@@ -221,10 +139,9 @@ export default function StepSummary({
               </div>
             </div>
 
-            <div className="bg-orange-900/10 border border-orange-900/30 p-3 rounded-lg flex items-center justify-center gap-2 text-center mt-4">
-              <p className="text-xs text-orange-200 leading-tight">
-                Reserva tu fecha abonando el{" "}
-                <span className="font-bold text-orange-400">50%</span>.
+            <div className="bg-stone-800/30 border border-stone-700/50 p-3 rounded-lg flex items-center justify-center gap-2 text-center mt-4">
+              <p className="text-xs text-stone-400 leading-tight">
+                El abono se coordina una vez confirmados los detalles por WhatsApp.
               </p>
             </div>
           </div>
