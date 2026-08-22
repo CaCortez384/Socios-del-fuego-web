@@ -86,6 +86,13 @@
   }
 }
 
+html, body {
+  overflow-x: hidden;
+  max-width: 100%;
+  width: 100%;
+  overscroll-behavior-x: none;
+}
+
 html {
   scroll-behavior: smooth;
 }
@@ -93,4 +100,5 @@ html {
 body {
   @apply bg-background text-foreground;
   font-feature-settings: "rlig" 1, "calt" 1;
+  position: relative;
 } 

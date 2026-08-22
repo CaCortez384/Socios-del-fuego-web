@@ -7,6 +7,12 @@ import { db } from '@/lib/firebase';
 interface ClientInfo {
   clientName: string;
   note?: string;
+  planId?: string;
+  planCategory?: string;
+  guestCount?: number;
+  phone?: string;
+  eventType?: string;
+  location?: string;
 }
 
 interface BookedDetails {

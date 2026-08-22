@@ -140,16 +140,16 @@ export default function CotizadorPage() {
 
   // --- RENDER ---
   return (
-    <div className="min-h-screen bg-stone-950 text-stone-100 font-sans selection:bg-orange-500 selection:text-white pb-20">
+    <div className="min-h-screen bg-stone-950 text-stone-100 font-sans selection:bg-orange-500 selection:text-white pb-20 overflow-x-hidden">
       {/* NAVBAR */}
-      <nav className="p-6 flex justify-between items-center bg-stone-950/80 backdrop-blur-md sticky top-0 z-50 border-b border-stone-900">
-        <div className="flex items-center gap-3">
+      <nav className="px-4 py-3 sm:p-6 flex justify-between items-center bg-stone-950/80 backdrop-blur-md sticky top-0 z-50 border-b border-stone-900 gap-2 overflow-hidden">
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0 shrink-0">
           <Link
             href="/"
             onClick={handleDoubleTap}
-            className="flex items-center gap-3 cursor-pointer select-none active:scale-95 transition-transform"
+            className="flex items-center gap-2 sm:gap-3 cursor-pointer select-none active:scale-95 transition-transform"
           >
-            <div className="relative h-10 w-10 overflow-hidden rounded-full border border-orange-600/20">
+            <div className="relative h-9 w-9 sm:h-10 sm:w-10 overflow-hidden rounded-full border border-orange-600/20 shrink-0">
               <Image
                 src="/logo.webp"
                 alt="Logo Socios del Fuego"
@@ -157,21 +157,21 @@ export default function CotizadorPage() {
                 className="object-cover"
               />
             </div>
-            <span className="font-bold text-xl tracking-tight text-stone-200">
+            <span className="font-bold text-lg sm:text-xl tracking-tight text-stone-200 whitespace-nowrap">
               Socios del <span className="text-orange-500">Fuego</span>
             </span>
           </Link>
         </div>
 
         {isAdmin && !loading && (
-          <span className="flex items-center gap-2 text-[10px] bg-red-500/10 text-red-400 px-3 py-1 rounded-full border border-red-500/20 font-bold font-mono animate-pulse">
-            <ShieldAlert size={12} /> MODO ADMIN ACTIVO
+          <span className="flex items-center gap-1.5 text-[9px] sm:text-[10px] bg-red-500/10 text-red-400 px-2 sm:px-3 py-1 rounded-full border border-red-500/20 font-bold font-mono animate-pulse whitespace-nowrap shrink-0">
+            <ShieldAlert size={10} /> MODO ADMIN
           </span>
         )}
       </nav>
 
       {/* MAIN CONTENT */}
-      <main className="mx-auto p-4 md:p-6 mt-4 max-w-5xl transition-all duration-500">
+      <main className="mx-auto p-4 md:p-6 mt-4 max-w-5xl transition-all duration-500 overflow-x-hidden">
         {error && (
           <div className="mb-6 p-4 bg-red-900/20 border border-red-900/50 rounded-xl text-red-200 text-sm text-center">
             {error}
