@@ -242,12 +242,9 @@ export default function StepPlanSelection({
                     />
 
                     <div className="absolute bottom-3 left-4 z-20 flex flex-col items-start drop-shadow-lg">
-                      <div className="flex items-baseline gap-1.5">
-                        <span className="text-2xl font-bold text-white tracking-tight">
-                          ${plan.pricePerPerson.toLocaleString("es-CL")}
-                        </span>
-                        <span className="text-stone-300 text-xs font-medium">
-                          p/p
+                      <div className="flex items-baseline gap-1.5 max-w-[200px]">
+                        <span className="text-[10px] font-bold text-white leading-tight bg-black/60 px-2 py-1 rounded backdrop-blur-sm border border-white/20">
+                          Precio variable según requerimientos y asistentes
                         </span>
                       </div>
                       {plan.totalWeight && (
@@ -473,11 +470,10 @@ export default function StepPlanSelection({
                         </span>
                       </div>
                     </div>
-                    <div className="text-right">
-                      <p className="text-white font-mono text-xl font-bold">
-                        ${selectedPlan.pricePerPerson.toLocaleString("es-CL")}
+                    <div className="text-right max-w-[140px]">
+                      <p className="text-orange-400 font-bold text-xs leading-tight mt-1">
+                        Precio variable según requerimientos y asistentes
                       </p>
-                      <p className="text-stone-500 text-xs">por persona</p>
                     </div>
                   </div>
 
@@ -576,8 +572,8 @@ export default function StepPlanSelection({
               <p className="text-white font-bold text-sm truncate">
                 {selectedPlan.name}
               </p>
-              <p className="text-orange-400 font-mono text-xs">
-                ${selectedPlan.pricePerPerson.toLocaleString("es-CL")} p/p
+              <p className="text-orange-400 font-bold text-[9px] leading-tight mt-0.5">
+                Precio variable según requerimientos y asistentes
               </p>
             </div>
 

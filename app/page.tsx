@@ -112,7 +112,7 @@ export default function Page() {
               <div className="flex items-center justify-center gap-4 mb-10">
                 <div className="h-px w-12 bg-orange-600/50 hidden md:block"></div>
                 <p className="text-xl md:text-2xl font-oswald text-orange-400 font-bold uppercase tracking-widest">
-                  Desde $23.000 p/p
+                  Cotización 100% Personalizada
                 </p>
                 <div className="h-px w-12 bg-orange-600/50 hidden md:block"></div>
               </div>
@@ -196,8 +196,7 @@ export default function Page() {
                           <h3 className="font-oswald text-2xl text-white font-semibold leading-none tracking-tight group-hover:text-orange-400 transition-colors">{plan.name}</h3>
                           <p className="text-stone-400 mt-1 text-sm">{plan.totalWeight}</p>
                           <div className="mt-4 flex items-baseline gap-1">
-                            <span className="text-3xl font-bold text-white">${plan.pricePerPerson.toLocaleString("es-CL")}</span>
-                            <span className="text-stone-500 text-sm font-medium">/ p/p</span>
+                            <span className="text-sm font-bold text-orange-400">Precio variable según requerimientos y asistentes</span>
                           </div>
                         </div>
 
@@ -230,7 +229,7 @@ export default function Page() {
                             });
                           }}
                         >
-                          Cotizar {plan.name}
+                          Cotizar este plan a medida
                         </Link>
                       </Button>
                     </div>
@@ -241,7 +240,7 @@ export default function Page() {
                         <DialogHeader className="text-left">
                           <DialogTitle className="font-oswald text-3xl text-white uppercase">{plan.name}</DialogTitle>
                           <DialogDescription className="text-stone-400 text-base">
-                            Detalle completo del servicio (${plan.pricePerPerson.toLocaleString("es-CL")} por persona)
+                            Detalle completo del servicio
                           </DialogDescription>
                         </DialogHeader>
                       </div>
@@ -310,7 +309,7 @@ export default function Page() {
                               });
                             }}
                           >
-                            Cotizar este plan
+                            Cotizar este plan a medida
                           </Link>
                         </Button>
                       </div>

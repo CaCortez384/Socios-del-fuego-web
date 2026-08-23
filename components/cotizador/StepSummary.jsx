@@ -44,9 +44,7 @@ export default function StepSummary({
   const locationName = selectedLocation?.commune || "Ubicación por definir";
   const zoneName = selectedLocation?.zoneName || "Zona por definir";
   const isCustomTransport = selectedLocation?.price === 0;
-  const transportText = isCustomTransport
-    ? "Traslado: A cotizar por interno"
-    : `Traslado: $${transportTotal.toLocaleString("es-CL")}`;
+  const transportText = "Traslado: A cotizar según ubicación";
   const totalLabel = isCustomTransport ? "TOTAL (Sin traslado)" : "TOTAL WEB";
   const cleanPhone = CONTACT_INFO.phone.replace(/[^0-9]/g, "");
 
@@ -72,7 +70,7 @@ export default function StepSummary({
     const corderoText = wantsCordero
       ? `\n🐑 Adicional: ${CORDERO_DATA.label}`
       : "";
-    const message = `Hola Socios del Fuego 🔥. Quiero ver la disponibilidad de esta fecha:\n\n📅 Fecha: ${formattedDate}\n👥 Invitados: ${numGuests}\n📍 Lugar: ${locationName} (${zoneName})\n\n🍖 Plan: ${selectedPlan.name}\n🚛 ${transportText}\n${corderoText}\n\n💰 ${totalLabel}: $${grandTotal.toLocaleString("es-CL")}\n\nQuedo atento para abonar.`;
+    const message = `Hola Socios del Fuego 🔥. Me gustaría cotizar un evento con ustedes. Aquí dejo los detalles:\n\n📅 Fecha: ${formattedDate}\n👥 Invitados: ${numGuests}\n📍 Lugar: ${locationName} (${zoneName})\n🍖 Plan de interés: ${selectedPlan.name}${corderoText}\n\nQuedo atento a su propuesta. ¡Gracias!`;
     return `https://api.whatsapp.com/send?phone=${cleanPhone}&text=${encodeURIComponent(message)}`;
   };
 
@@ -108,13 +106,9 @@ export default function StepSummary({
               Total Servicio
             </p>
             <div className="flex items-baseline justify-center gap-1 text-white">
-              <span className="text-2xl font-medium text-stone-500">$</span>
-              <span className="text-5xl font-bold tracking-tight text-white">
-                {grandTotal.toLocaleString("es-CL")}
+              <span className="text-2xl font-bold text-orange-400">
+                A cotizar a medida
               </span>
-              {selectedLocation?.price === 0 && (
-                <span className="text-lg text-stone-500 ml-2">*</span>
-              )}
             </div>
             {selectedLocation?.price === 0 && (
               <p className="text-[10px] text-stone-500 mt-[-10px]">
@@ -254,14 +248,13 @@ export default function StepSummary({
                     <p className="text-sm text-stone-300 font-medium">
                       {selectedPlan?.name}
                     </p>
-                    <p className="text-[10px] text-stone-500">
-                      (${selectedPlan?.pricePerPerson.toLocaleString("es-CL")}{" "}
-                      p/p)
+                    <p className="text-[10px] text-stone-500 mt-0.5">
+                      (Precio a medida)
                     </p>
                   </div>
                 </div>
-                <span className="text-sm text-stone-400 font-mono">
-                  ${planTotal.toLocaleString("es-CL")}
+                <span className="text-sm text-orange-400 font-bold">
+                  A cotizar
                 </span>
               </div>
               {wantsCordero && (
@@ -282,10 +275,8 @@ export default function StepSummary({
                   <Truck className="w-4 h-4 text-stone-500" />
                   <span className="text-sm text-stone-300">Traslado</span>
                 </div>
-                <span className="text-sm text-stone-400 font-mono">
-                  {selectedLocation?.price === 0
-                    ? "A cotizar"
-                    : `$${transportTotal.toLocaleString("es-CL")}`}
+                <span className="text-sm text-orange-400 font-bold">
+                  A cotizar
                 </span>
               </div>
             </div>
@@ -372,7 +363,7 @@ export default function StepSummary({
                   VALOR TOTAL
                 </span>
                 <span className="font-bold text-black text-2xl">
-                  ${grandTotal.toLocaleString("es-CL")}
+                  A cotizar
                 </span>
               </div>
               {selectedLocation?.price === 0 && (
