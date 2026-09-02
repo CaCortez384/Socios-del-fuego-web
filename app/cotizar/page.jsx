@@ -38,6 +38,9 @@ export default function CotizadorPage() {
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [wantsCordero, setWantsCordero] = useState(false);
+  const [wantsMobiliario, setWantsMobiliario] = useState(false);
+  const [wantsPostres, setWantsPostres] = useState(false);
+  const [postreOption, setPostreOption] = useState("pina");
 
   // FIREBASE & HOOKS
   const { bookedDates, bookedDetails, loading, error, toggleDateLock } = useAvailability();
@@ -214,6 +217,12 @@ export default function CotizadorPage() {
                     setSelectedPlan={setSelectedPlan}
                     wantsCordero={wantsCordero}
                     setWantsCordero={setWantsCordero}
+                    wantsMobiliario={wantsMobiliario}
+                    setWantsMobiliario={setWantsMobiliario}
+                    wantsPostres={wantsPostres}
+                    setWantsPostres={setWantsPostres}
+                    postreOption={postreOption}
+                    setPostreOption={setPostreOption}
                     onNext={() => setStep(2)}
                     onBack={() => {}}
                   />
@@ -242,6 +251,9 @@ export default function CotizadorPage() {
                     selectedLocation={selectedLocation}
                     selectedPlan={selectedPlan}
                     wantsCordero={wantsCordero}
+                    wantsMobiliario={wantsMobiliario}
+                    wantsPostres={wantsPostres}
+                    postreOption={postreOption}
                     onBack={() => setStep(2)}
                   />
                 )}

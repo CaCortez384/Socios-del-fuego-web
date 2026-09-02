@@ -176,8 +176,8 @@ export default function Page() {
               <p className="text-stone-500 text-sm font-bold uppercase tracking-widest">Cargando menús...</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-12">
-              {PLANS.filter(plan => plan.category === "full").map((plan) => (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+              {PLANS.filter(plan => plan.category === "full" && plan.active !== false).map((plan) => (
                 <Dialog key={plan.id}>
                   <Card className={`bg-stone-900 border-stone-800 flex flex-col relative transition-all duration-300 hover:border-stone-600 ${plan.recommended ? 'shadow-[0_0_20px_rgba(2,132,199,0.15)] border-sky-600/50 hover:border-sky-500' : ''}`}>
 

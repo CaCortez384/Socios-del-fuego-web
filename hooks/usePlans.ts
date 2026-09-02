@@ -22,10 +22,30 @@ export function usePlans() {
 
         const fetchedPlans: (typeof FALLBACK_PLANS[number] & { id: string })[] = [];
         querySnapshot.forEach((doc) => {
-          fetchedPlans.push({ id: doc.id, ...doc.data() } as typeof FALLBACK_PLANS[number] & { id: string });
+          const docData = doc.data();
+          const fallback = FALLBACK_PLANS.find((p) => p.id === doc.id);
+          const planObj = {
+            ...(fallback || {}),
+            ...docData,
+            id: doc.id,
+          } as typeof FALLBACK_PLANS[number] & { id: string };
+
+          if (doc.id === "criollo") {
+            planObj.category = "al_plato";
+            planObj.active = true;
+          }
+
+          fetchedPlans.push(planObj);
         });
 
-        // Ordenamos por categoría (primero full, luego cocktail) y luego por priceLevel
+        if (!fetchedPlans.some((p) => p.id === "criollo")) {
+          const criolloFallback = FALLBACK_PLANS.find((p) => p.id === "criollo");
+          if (criolloFallback) {
+            fetchedPlans.push(criolloFallback);
+          }
+        }
+
+        // Ordenamos por categoría y luego por priceLevel
         fetchedPlans.sort((a, b) => {
           if (a.category !== b.category) {
             return a.category === 'full' ? -1 : 1;

@@ -29,6 +29,9 @@ export default function StepSummary({
   selectedLocation,
   selectedPlan,
   wantsCordero,
+  wantsMobiliario,
+  wantsPostres,
+  postreOption = "pina",
   onBack,
 }) {
   const [userDoubt, setUserDoubt] = useState("");
@@ -37,8 +40,10 @@ export default function StepSummary({
   const numGuests = parseInt(guests, 10) || 0;
   const planTotal = numGuests * (selectedPlan?.pricePerPerson || 0);
   const corderoTotal = wantsCordero ? CORDERO_DATA.price : 0;
+  const mobiliarioTotal = wantsMobiliario ? numGuests * 10000 : 0;
+  const postresTotal = wantsPostres ? numGuests * 3500 : 0;
   const transportTotal = selectedLocation?.price || 0;
-  const grandTotal = planTotal + corderoTotal + transportTotal;
+  const grandTotal = planTotal + corderoTotal + mobiliarioTotal + postresTotal + transportTotal;
 
   const formattedDate = date ? format(date, "EEEE d 'de' MMMM", { locale: es }) : "";
   const locationName = selectedLocation?.commune || "Ubicación por definir";
@@ -67,10 +72,32 @@ export default function StepSummary({
 
   const generateWhatsAppLink = () => {
     if (!date || !selectedPlan) return "#";
-    const corderoText = wantsCordero
-      ? `\n🐑 Adicional: ${CORDERO_DATA.label}`
-      : "";
-    const message = `Hola Socios del Fuego 🔥. Me gustaría cotizar un evento con ustedes. Aquí dejo los detalles:\n\n📅 Fecha: ${formattedDate}\n👥 Invitados: ${numGuests}\n📍 Lugar: ${locationName} (${zoneName})\n🍖 Plan de interés: ${selectedPlan.name}${corderoText}\n\nQuedo atento a su propuesta. ¡Gracias!`;
+    const extrasList = [];
+    if (wantsMobiliario) {
+      extrasList.push(`🪑 Mobiliario Completo: $${mobiliarioTotal.toLocaleString("es-CL")} ($10.000 p/p)`);
+    }
+    if (wantsPostres) {
+      const dessertFlavor = postreOption === "pina" ? "Piña a la Parrilla c/ Helado" : "Frutillas c/ Crema";
+      extrasList.push(`🍰 Postres (${dessertFlavor}): $${postresTotal.toLocaleString("es-CL")} ($3.500 p/p)`);
+    }
+    if (wantsCordero) {
+      extrasList.push(`🐑 ${CORDERO_DATA.label}: $${corderoTotal.toLocaleString("es-CL")}`);
+    }
+
+    const extrasText = extrasList.length > 0 ? `\n✨ Adicionales:\n${extrasList.map(e => `- ${e}`).join("\n")}` : "";
+    const transportLine = transportTotal > 0
+      ? `🚚 Traslado (${locationName}): $${transportTotal.toLocaleString("es-CL")}`
+      : `🚚 Traslado: A cotizar según dirección exacta`;
+
+    const message = `Hola Socios del Fuego 🔥. Me gustaría cotizar un evento con ustedes. Aquí dejo los detalles:\n\n` +
+      `📅 Fecha: ${formattedDate}\n` +
+      `👥 Invitados: ${numGuests} personas\n` +
+      `📍 Lugar: ${locationName} (${zoneName})\n` +
+      `🍖 Plan Seleccionado: ${selectedPlan.name} ($${planTotal.toLocaleString("es-CL")})\n` +
+      `${extrasText}\n` +
+      `${transportLine}\n\n` +
+      `💰 TOTAL ESTIMADO: $${grandTotal.toLocaleString("es-CL")}\n\n` +
+      `Quedo atento a su confirmación. ¡Gracias!`;
     return `https://api.whatsapp.com/send?phone=${cleanPhone}&text=${encodeURIComponent(message)}`;
   };
 
@@ -103,16 +130,19 @@ export default function StepSummary({
         <div className="space-y-4 no-print order-1 md:order-2">
           <div className="bg-stone-900/50 rounded-2xl border border-stone-800 p-8 text-center space-y-4 shadow-xl">
             <p className="text-xs text-stone-500 font-bold uppercase tracking-widest">
-              Total Servicio
+              Total Estimado Servicio
             </p>
-            <div className="flex items-baseline justify-center gap-1 text-white">
-              <span className="text-2xl font-bold text-orange-400">
-                A cotizar a medida
+            <div className="flex flex-col items-center justify-center text-white">
+              <span className="text-4xl font-extrabold text-orange-400">
+                ${grandTotal.toLocaleString("es-CL")}
+              </span>
+              <span className="text-xs text-stone-400 mt-1.5 font-medium">
+                {numGuests} invitados • Incluye insumos y servicio completo
               </span>
             </div>
             {selectedLocation?.price === 0 && (
               <p className="text-[10px] text-stone-500 mt-[-10px]">
-                * Traslado a coordinar.
+                * Traslado por confirmar según ubicación exacta.
               </p>
             )}
 
@@ -246,17 +276,43 @@ export default function StepSummary({
                   <Flame className="w-4 h-4 text-orange-500 mt-1" />
                   <div>
                     <p className="text-sm text-stone-300 font-medium">
-                      {selectedPlan?.name}
+                      {selectedPlan?.name} (${selectedPlan?.pricePerPerson?.toLocaleString("es-CL")} p/p)
                     </p>
                     <p className="text-[10px] text-stone-500 mt-0.5">
-                      (Precio a medida)
+                      {numGuests} pers. x ${selectedPlan?.pricePerPerson?.toLocaleString("es-CL")}
                     </p>
                   </div>
                 </div>
-                <span className="text-sm text-orange-400 font-bold">
-                  A cotizar
+                <span className="text-sm text-stone-200 font-mono font-bold">
+                  ${planTotal.toLocaleString("es-CL")}
                 </span>
               </div>
+              {wantsMobiliario && (
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <Plus className="w-4 h-4 text-orange-500" />
+                    <span className="text-sm text-stone-300">
+                      Mobiliario Completo ($10.000 p/p)
+                    </span>
+                  </div>
+                  <span className="text-sm text-stone-400 font-mono">
+                    ${mobiliarioTotal.toLocaleString("es-CL")}
+                  </span>
+                </div>
+              )}
+              {wantsPostres && (
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <Plus className="w-4 h-4 text-orange-500" />
+                    <span className="text-sm text-stone-300">
+                      Postres ({postreOption === "pina" ? "Piña a la Parrilla" : "Frutillas c/ Crema"}) ($3.500 p/p)
+                    </span>
+                  </div>
+                  <span className="text-sm text-stone-400 font-mono">
+                    ${postresTotal.toLocaleString("es-CL")}
+                  </span>
+                </div>
+              )}
               {wantsCordero && (
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
@@ -273,10 +329,12 @@ export default function StepSummary({
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <Truck className="w-4 h-4 text-stone-500" />
-                  <span className="text-sm text-stone-300">Traslado</span>
+                  <span className="text-sm text-stone-300">
+                    Traslado ({selectedLocation?.commune || "Ubicación"})
+                  </span>
                 </div>
-                <span className="text-sm text-orange-400 font-bold">
-                  A cotizar
+                <span className="text-sm text-stone-200 font-mono font-bold">
+                  {transportTotal > 0 ? `$${transportTotal.toLocaleString("es-CL")}` : "A cotizar"}
                 </span>
               </div>
             </div>
@@ -363,7 +421,7 @@ export default function StepSummary({
                   VALOR TOTAL
                 </span>
                 <span className="font-bold text-black text-2xl">
-                  A cotizar
+                  ${grandTotal.toLocaleString("es-CL")}
                 </span>
               </div>
               {selectedLocation?.price === 0 && (
