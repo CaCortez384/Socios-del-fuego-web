@@ -21,6 +21,7 @@ import {
   Cake,
   UtensilsCrossed,
   Sparkles,
+  Coffee,
 } from "lucide-react";
 import TrustBar from "./TrustBar";
 
@@ -45,6 +46,10 @@ export default function StepPlanSelection({
   setWantsPostres,
   postreOption = "pina",
   setPostreOption,
+  wantsCoffeeBreak = false,
+  setWantsCoffeeBreak,
+  coffeeBreakOption = "kuchen",
+  setCoffeeBreakOption,
   onNext,
 }) {
   const [activeTab, setActiveTab] = useState("full");
@@ -122,20 +127,87 @@ export default function StepPlanSelection({
     if (selectedPlan?.id === plan.id) return;
     setSelectedPlan(plan);
 
+    const categoryNames = {
+      full: "Servicio Buffet",
+      al_plato: "Carne al Plato",
+      picar: "Solo Picoteo",
+    };
+
     trackCotizacion("select_item", {
       item_list_id: activeTab,
-      item_list_name: activeTab === "full" ? "Al Plato" : "Solo Picoteo",
+      item_list_name: categoryNames[activeTab] || activeTab,
       items: [
         {
           item_id: plan.id,
           item_name: plan.name,
+          item_category: categoryNames[activeTab] || activeTab,
           price: plan.pricePerPerson,
         },
       ],
     });
   };
 
-  // --- EVENTO GA4: UPSELL (AÑADIR/QUITAR CORDERO DEL CARRITO) ---
+  // --- EVENTOS GA4: UPSELL (AÑADIR/QUITAR EXTRAS DEL CARRITO) ---
+  const handleToggleCoffeeBreak = () => {
+    const newValue = !wantsCoffeeBreak;
+    setWantsCoffeeBreak(newValue);
+    setHasReviewedExtras(true);
+
+    trackCotizacion(newValue ? "add_to_cart" : "remove_from_cart", {
+      currency: "CLP",
+      value: ADDONS_DATA.coffeeBreak.pricePerPerson,
+      items: [
+        {
+          item_id: "coffeebreak-extra",
+          item_name: ADDONS_DATA.coffeeBreak.label,
+          item_category: "Adicionales",
+          price: ADDONS_DATA.coffeeBreak.pricePerPerson,
+          quantity: 1,
+        },
+      ],
+    });
+  };
+
+  const handleToggleMobiliario = () => {
+    const newValue = !wantsMobiliario;
+    setWantsMobiliario(newValue);
+    setHasReviewedExtras(true);
+
+    trackCotizacion(newValue ? "add_to_cart" : "remove_from_cart", {
+      currency: "CLP",
+      value: ADDONS_DATA.mobiliario.pricePerPerson,
+      items: [
+        {
+          item_id: "mobiliario-extra",
+          item_name: ADDONS_DATA.mobiliario.label,
+          item_category: "Adicionales",
+          price: ADDONS_DATA.mobiliario.pricePerPerson,
+          quantity: 1,
+        },
+      ],
+    });
+  };
+
+  const handleTogglePostres = () => {
+    const newValue = !wantsPostres;
+    setWantsPostres(newValue);
+    setHasReviewedExtras(true);
+
+    trackCotizacion(newValue ? "add_to_cart" : "remove_from_cart", {
+      currency: "CLP",
+      value: ADDONS_DATA.postres.pricePerPerson,
+      items: [
+        {
+          item_id: "postres-extra",
+          item_name: ADDONS_DATA.postres.label,
+          item_category: "Adicionales",
+          price: ADDONS_DATA.postres.pricePerPerson,
+          quantity: 1,
+        },
+      ],
+    });
+  };
+
   const handleToggleCordero = () => {
     const newValue = !wantsCordero;
     setWantsCordero(newValue);
@@ -148,6 +220,7 @@ export default function StepPlanSelection({
         {
           item_id: "cordero-extra",
           item_name: CORDERO_DATA.label,
+          item_category: "Adicionales",
           price: CORDERO_DATA.price,
           quantity: 1,
         },
@@ -159,7 +232,7 @@ export default function StepPlanSelection({
   const handleNext = (forceAdvance = false) => {
     if (!selectedPlan) return;
 
-    const hasAnyExtra = wantsCordero || wantsMobiliario || wantsPostres;
+    const hasAnyExtra = wantsCordero || wantsMobiliario || wantsPostres || wantsCoffeeBreak;
 
     // Si el usuario aún no ve ni selecciona los extras y no presiona forzar avance:
     if (!forceAdvance && !hasReviewedExtras && !hasAnyExtra) {
@@ -167,17 +240,48 @@ export default function StepPlanSelection({
       return;
     }
 
+    const items = [
+      {
+        item_id: selectedPlan.id,
+        item_name: selectedPlan.name,
+        item_category: selectedPlan.category === "al_plato" ? "Carne al Plato" : selectedPlan.category === "picar" ? "Solo Picoteo" : "Servicio Buffet",
+        price: selectedPlan.pricePerPerson,
+        quantity: 1,
+      },
+      wantsCoffeeBreak && {
+        item_id: "coffeebreak-extra",
+        item_name: `Coffee Break / Desayuno (${coffeeBreakOption === "kuchen" ? "Kuchen Nuez" : "Pie Limón"})`,
+        item_category: "Adicionales",
+        price: 7500,
+        quantity: 1,
+      },
+      wantsMobiliario && {
+        item_id: "mobiliario-extra",
+        item_name: "Mobiliario Completo",
+        item_category: "Adicionales",
+        price: 10000,
+        quantity: 1,
+      },
+      wantsPostres && {
+        item_id: "postres-extra",
+        item_name: `Postres (${postreOption === "pina" ? "Piña a la Parrilla" : "Frutillas c/ Crema"})`,
+        item_category: "Adicionales",
+        price: 3500,
+        quantity: 1,
+      },
+      wantsCordero && {
+        item_id: "cordero-extra",
+        item_name: CORDERO_DATA.label,
+        item_category: "Adicionales",
+        price: CORDERO_DATA.price,
+        quantity: 1,
+      },
+    ].filter(Boolean);
+
     trackCotizacion("add_to_cart", {
       currency: "CLP",
       value: selectedPlan.pricePerPerson,
-      items: [
-        {
-          item_id: selectedPlan.id,
-          item_name: selectedPlan.name,
-          price: selectedPlan.pricePerPerson,
-          quantity: 1,
-        },
-      ],
+      items: items,
     });
     onNext();
   };
@@ -465,75 +569,222 @@ export default function StepPlanSelection({
             </div>
           </div>
 
-          {/* SECCIÓN DE ADICIONALES (MOBILE FIRST) */}
+          {/* SECCIÓN DE ADICIONALES PREMIUM REDISEÑADA */}
           <div
             id="seccion-adicionales"
-            className={`mt-8 mb-6 space-y-4 rounded-3xl p-4 transition-all duration-500 ${
+            className={`mt-10 mb-8 space-y-6 rounded-3xl p-5 md:p-6 transition-all duration-500 border ${
               highlightExtras
-                ? "bg-orange-950/20 ring-2 ring-orange-500 shadow-[0_0_35px_rgba(249,115,22,0.3)]"
-                : "bg-transparent"
+                ? "bg-gradient-to-b from-orange-950/30 via-stone-950 to-stone-950 border-orange-500 ring-4 ring-orange-500/20 shadow-[0_0_50px_rgba(249,115,22,0.25)]"
+                : "bg-stone-950/80 border-stone-800/80 shadow-2xl"
             }`}
           >
             {highlightExtras && (
-              <div className="bg-gradient-to-r from-orange-600 to-amber-600 text-white p-3 rounded-xl flex items-center justify-between gap-3 text-xs font-bold shadow-lg animate-in fade-in slide-in-from-top-2">
+              <div className="bg-gradient-to-r from-orange-600 via-amber-600 to-orange-500 text-white p-3.5 rounded-2xl flex items-center justify-between gap-3 text-xs font-extrabold shadow-lg animate-in fade-in slide-in-from-top-2">
                 <div className="flex items-center gap-2">
-                  <Sparkles size={18} className="animate-spin" />
+                  <Sparkles size={18} className="animate-spin text-amber-200" />
                   <span>Personaliza tu experiencia con nuestros opcionales antes de continuar</span>
                 </div>
               </div>
             )}
 
-            <div className="flex items-center gap-2 border-b border-stone-800 pb-3">
-              <Plus className="w-5 h-5 text-orange-500" />
-              <h3 className="font-bold text-lg text-white uppercase tracking-wider">
-                Personaliza tu Evento (Adicionales)
-              </h3>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-stone-800/80 pb-4">
+              <div>
+                <span className="text-[10px] font-extrabold uppercase tracking-widest text-orange-500 bg-orange-950/80 px-2.5 py-1 rounded-full border border-orange-800/60">
+                  Complementos Exclusivos
+                </span>
+                <h3 className="font-extrabold text-xl text-white mt-1.5 flex items-center gap-2">
+                  Personaliza tu Evento <Sparkles className="w-5 h-5 text-amber-400" />
+                </h3>
+              </div>
+              <p className="text-stone-400 text-xs max-w-xs">
+                Suma equipamiento, bebidas, postres o coffee break para hacer tu banquete inolvidable.
+              </p>
             </div>
 
-            <div className="grid grid-cols-1 gap-4">
-              {/* MOBILIARIO */}
+            <div className="grid grid-cols-1 gap-5">
+              {/* ☕ EXTRA 1: COFFEE BREAK / DESAYUNO */}
               <div
-                onClick={() => setWantsMobiliario(!wantsMobiliario)}
-                className={`p-4 rounded-2xl border-2 transition-all cursor-pointer group flex flex-col md:flex-row items-center justify-between gap-4 ${
-                  wantsMobiliario
-                    ? "border-orange-500 bg-orange-900/10 shadow-[0_0_20px_rgba(249,115,22,0.15)]"
-                    : "border-stone-800 bg-stone-950/60 hover:border-stone-700"
+                onClick={handleToggleCoffeeBreak}
+                className={`p-5 rounded-2xl border-2 transition-all cursor-pointer group flex flex-col gap-4 relative overflow-hidden ${
+                  wantsCoffeeBreak
+                    ? "border-amber-500 bg-gradient-to-br from-amber-950/30 via-stone-900/90 to-stone-950 shadow-[0_0_30px_rgba(245,158,11,0.2)]"
+                    : "border-stone-800/90 bg-stone-900/40 hover:border-amber-500/50 hover:bg-stone-900/80"
                 }`}
               >
-                <div className="flex items-center gap-3.5 flex-1">
+                <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 w-full">
+                  <div className="flex items-start gap-4 flex-1">
+                    <div
+                      className={`p-3.5 rounded-2xl shrink-0 transition-all ${
+                        wantsCoffeeBreak
+                          ? "bg-amber-500 text-stone-950 shadow-lg shadow-amber-500/30"
+                          : "bg-stone-800/80 text-amber-400 group-hover:scale-105"
+                      }`}
+                    >
+                      <Coffee size={24} />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="text-[9px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-md bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                          Desayuno / Matutino
+                        </span>
+                        {wantsCoffeeBreak && (
+                          <span className="text-[9px] font-extrabold tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-amber-500 text-stone-950 shadow-sm flex items-center gap-1">
+                            <Check size={12} /> AGREGADO ({coffeeBreakOption === "kuchen" ? "Kuchen Nuez" : "Pie Limón"})
+                          </span>
+                        )}
+                      </div>
+                      <h4 className="font-bold text-lg text-white mt-1">
+                        {ADDONS_DATA.coffeeBreak.label}
+                      </h4>
+                      <p className="text-stone-300 text-xs mt-1 leading-relaxed">
+                        {ADDONS_DATA.coffeeBreak.description}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between md:justify-end gap-4 w-full md:w-auto shrink-0 border-t border-stone-800/60 md:border-none pt-3 md:pt-0">
+                    <div className="text-right">
+                      <span className="font-extrabold text-amber-400 text-base block">
+                        +$7.500 p/p
+                      </span>
+                      <span className="text-[10px] text-stone-400">Servicio por invitado</span>
+                    </div>
+                    <button
+                      type="button"
+                      className={`px-4 py-2.5 rounded-xl text-xs font-extrabold transition-all flex items-center gap-1.5 shadow-md ${
+                        wantsCoffeeBreak
+                          ? "bg-amber-500 text-stone-950 hover:bg-red-500 hover:text-white"
+                          : "bg-stone-800 text-stone-200 hover:bg-amber-600 hover:text-white"
+                      }`}
+                    >
+                      {wantsCoffeeBreak ? (
+                        <>
+                          <Check size={14} /> Quitar
+                        </>
+                      ) : (
+                        <>
+                          <Plus size={14} /> Agregar
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </div>
+
+                {/* DETALLES DEL MENÚ DE COFFEE BREAK */}
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2 border-t border-stone-800/60 text-[11px] text-stone-300">
+                  <div className="bg-stone-950/50 p-2 rounded-xl border border-stone-800/50">
+                    <span className="text-amber-400 font-bold block text-[10px] uppercase">Calientes</span>
+                    <span>Café & Té surtido</span>
+                  </div>
+                  <div className="bg-stone-950/50 p-2 rounded-xl border border-stone-800/50">
+                    <span className="text-amber-400 font-bold block text-[10px] uppercase">Frías</span>
+                    <span>Jugo de fruta & Agua</span>
+                  </div>
+                  <div className="bg-stone-950/50 p-2 rounded-xl border border-stone-800/50">
+                    <span className="text-amber-400 font-bold block text-[10px] uppercase">Salado</span>
+                    <span>1 Tapadito pollo + 1 Jamón/Queso</span>
+                  </div>
+                  <div className="bg-stone-950/50 p-2 rounded-xl border border-stone-800/50">
+                    <span className="text-amber-400 font-bold block text-[10px] uppercase">Acompañamiento</span>
+                    <span>Queque casero & Galletas</span>
+                  </div>
+                </div>
+
+                {/* SELECTOR DE OPCIÓN DULCE */}
+                {wantsCoffeeBreak && (
                   <div
-                    className={`p-3 rounded-xl shrink-0 transition-colors ${
+                    onClick={(e) => e.stopPropagation()}
+                    className="pt-3 border-t border-amber-500/30 w-full animate-in fade-in slide-in-from-top-1 bg-amber-950/40 -mx-5 -mb-5 p-4 rounded-b-2xl"
+                  >
+                    <p className="text-xs font-bold text-amber-300 mb-2 flex items-center gap-1.5">
+                      <Cake size={14} /> Selecciona la especialidad dulce de tu Coffee Break:
+                    </p>
+                    <div className="grid grid-cols-2 gap-2">
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setCoffeeBreakOption("kuchen");
+                        }}
+                        className={`py-2 px-3 rounded-xl text-xs font-bold transition-all border flex items-center justify-center gap-1.5 ${
+                          coffeeBreakOption === "kuchen"
+                            ? "bg-amber-500 text-stone-950 border-amber-400 shadow-md shadow-amber-900/40"
+                            : "bg-stone-900/90 text-stone-300 border-stone-800 hover:border-stone-700"
+                        }`}
+                      >
+                        🥧 Kuchen de Nuez
+                      </button>
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setCoffeeBreakOption("pie");
+                        }}
+                        className={`py-2 px-3 rounded-xl text-xs font-bold transition-all border flex items-center justify-center gap-1.5 ${
+                          coffeeBreakOption === "pie"
+                            ? "bg-amber-500 text-stone-950 border-amber-400 shadow-md shadow-amber-900/40"
+                            : "bg-stone-900/90 text-stone-300 border-stone-800 hover:border-stone-700"
+                        }`}
+                      >
+                        🍋 Pie de Limón
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* 🪑 EXTRA 2: MOBILIARIO COMPLETO */}
+              <div
+                onClick={handleToggleMobiliario}
+                className={`p-5 rounded-2xl border-2 transition-all cursor-pointer group flex flex-col md:flex-row items-center justify-between gap-4 ${
+                  wantsMobiliario
+                    ? "border-orange-500 bg-gradient-to-br from-orange-950/30 via-stone-900/90 to-stone-950 shadow-[0_0_30px_rgba(249,115,22,0.2)]"
+                    : "border-stone-800/90 bg-stone-900/40 hover:border-orange-500/50 hover:bg-stone-900/80"
+                }`}
+              >
+                <div className="flex items-start gap-4 flex-1">
+                  <div
+                    className={`p-3.5 rounded-2xl shrink-0 transition-all ${
                       wantsMobiliario
-                        ? "bg-orange-600 text-white shadow-lg"
-                        : "bg-stone-800 text-stone-400"
+                        ? "bg-orange-600 text-white shadow-lg shadow-orange-600/30"
+                        : "bg-stone-800/80 text-orange-400 group-hover:scale-105"
                     }`}
                   >
-                    <Armchair size={22} />
+                    <Armchair size={24} />
                   </div>
                   <div>
-                    <h4 className="font-bold text-base text-white flex items-center gap-2">
-                      {ADDONS_DATA.mobiliario.label}
+                    <div className="flex items-center gap-2">
+                      <span className="text-[9px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-md bg-orange-500/20 text-orange-300 border border-orange-500/30">
+                        Servicio Full
+                      </span>
                       {wantsMobiliario && (
-                        <span className="text-[9px] bg-orange-600 px-2 py-0.5 rounded-full text-white">
-                          AGREGADO
+                        <span className="text-[9px] font-extrabold tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-orange-600 text-white shadow-sm flex items-center gap-1">
+                          <Check size={12} /> AGREGADO
                         </span>
                       )}
+                    </div>
+                    <h4 className="font-bold text-lg text-white mt-1">
+                      {ADDONS_DATA.mobiliario.label}
                     </h4>
-                    <p className="text-stone-400 text-xs mt-0.5 leading-relaxed">
+                    <p className="text-stone-300 text-xs mt-1 leading-relaxed">
                       {ADDONS_DATA.mobiliario.description}
                     </p>
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between md:justify-end gap-4 w-full md:w-auto shrink-0 border-t border-stone-900 md:border-none pt-3 md:pt-0">
-                  <span className="font-bold text-orange-400 text-sm">
-                    +$10.000 p/p
-                  </span>
+                <div className="flex items-center justify-between md:justify-end gap-4 w-full md:w-auto shrink-0 border-t border-stone-800/60 md:border-none pt-3 md:pt-0">
+                  <div className="text-right">
+                    <span className="font-extrabold text-orange-400 text-base block">
+                      +$10.000 p/p
+                    </span>
+                    <span className="text-[10px] text-stone-400">Por invitado</span>
+                  </div>
                   <button
-                    className={`px-4 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
+                    type="button"
+                    className={`px-4 py-2.5 rounded-xl text-xs font-extrabold transition-all flex items-center gap-1.5 shadow-md ${
                       wantsMobiliario
                         ? "bg-orange-600 text-white hover:bg-red-600"
-                        : "bg-stone-800 text-stone-200 hover:bg-stone-700"
+                        : "bg-stone-800 text-stone-200 hover:bg-orange-600 hover:text-white"
                     }`}
                   >
                     {wantsMobiliario ? (
@@ -549,50 +800,59 @@ export default function StepPlanSelection({
                 </div>
               </div>
 
-              {/* POSTRES */}
+              {/* 🍰 EXTRA 3: POSTRES A LA PARRILLA */}
               <div
-                onClick={() => setWantsPostres(!wantsPostres)}
-                className={`p-4 rounded-2xl border-2 transition-all cursor-pointer group flex flex-col gap-3 ${
+                onClick={handleTogglePostres}
+                className={`p-5 rounded-2xl border-2 transition-all cursor-pointer group flex flex-col gap-4 relative overflow-hidden ${
                   wantsPostres
-                    ? "border-orange-500 bg-orange-900/10 shadow-[0_0_20px_rgba(249,115,22,0.15)]"
-                    : "border-stone-800 bg-stone-950/60 hover:border-stone-700"
+                    ? "border-orange-500 bg-gradient-to-br from-orange-950/30 via-stone-900/90 to-stone-950 shadow-[0_0_30px_rgba(249,115,22,0.2)]"
+                    : "border-stone-800/90 bg-stone-900/40 hover:border-orange-500/50 hover:bg-stone-900/80"
                 }`}
               >
-                <div className="flex flex-col md:flex-row items-center justify-between gap-4 w-full">
-                  <div className="flex items-center gap-3.5 flex-1">
+                <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 w-full">
+                  <div className="flex items-start gap-4 flex-1">
                     <div
-                      className={`p-3 rounded-xl shrink-0 transition-colors ${
+                      className={`p-3.5 rounded-2xl shrink-0 transition-all ${
                         wantsPostres
-                          ? "bg-orange-600 text-white shadow-lg"
-                          : "bg-stone-800 text-stone-400"
+                          ? "bg-orange-600 text-white shadow-lg shadow-orange-600/30"
+                          : "bg-stone-800/80 text-orange-400 group-hover:scale-105"
                       }`}
                     >
-                      <Cake size={22} />
+                      <Cake size={24} />
                     </div>
                     <div>
-                      <h4 className="font-bold text-base text-white flex items-center gap-2">
-                        {ADDONS_DATA.postres.label}
+                      <div className="flex items-center gap-2">
+                        <span className="text-[9px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-md bg-orange-500/20 text-orange-300 border border-orange-500/30">
+                          Dulce Cierre
+                        </span>
                         {wantsPostres && (
-                          <span className="text-[9px] bg-orange-600 px-2 py-0.5 rounded-full text-white font-semibold">
-                            AGREGADO ({postreOption === "pina" ? "Piña" : "Frutillas"})
+                          <span className="text-[9px] font-extrabold tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-orange-600 text-white shadow-sm flex items-center gap-1">
+                            <Check size={12} /> AGREGADO ({postreOption === "pina" ? "Piña" : "Frutillas"})
                           </span>
                         )}
+                      </div>
+                      <h4 className="font-bold text-lg text-white mt-1">
+                        {ADDONS_DATA.postres.label}
                       </h4>
-                      <p className="text-stone-400 text-xs mt-0.5 leading-relaxed">
+                      <p className="text-stone-300 text-xs mt-1 leading-relaxed">
                         {ADDONS_DATA.postres.description}
                       </p>
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between md:justify-end gap-4 w-full md:w-auto shrink-0 border-t border-stone-900 md:border-none pt-3 md:pt-0">
-                    <span className="font-bold text-orange-400 text-sm">
-                      +$3.500 p/p
-                    </span>
+                  <div className="flex items-center justify-between md:justify-end gap-4 w-full md:w-auto shrink-0 border-t border-stone-800/60 md:border-none pt-3 md:pt-0">
+                    <div className="text-right">
+                      <span className="font-extrabold text-orange-400 text-base block">
+                        +$3.500 p/p
+                      </span>
+                      <span className="text-[10px] text-stone-400">Por invitado</span>
+                    </div>
                     <button
-                      className={`px-4 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
+                      type="button"
+                      className={`px-4 py-2.5 rounded-xl text-xs font-extrabold transition-all flex items-center gap-1.5 shadow-md ${
                         wantsPostres
                           ? "bg-orange-600 text-white hover:bg-red-600"
-                          : "bg-stone-800 text-stone-200 hover:bg-stone-700"
+                          : "bg-stone-800 text-stone-200 hover:bg-orange-600 hover:text-white"
                       }`}
                     >
                       {wantsPostres ? (
@@ -611,9 +871,9 @@ export default function StepPlanSelection({
                 {wantsPostres && (
                   <div
                     onClick={(e) => e.stopPropagation()}
-                    className="pt-3 border-t border-stone-800/80 w-full animate-in fade-in slide-in-from-top-1"
+                    className="pt-3 border-t border-orange-500/30 w-full animate-in fade-in slide-in-from-top-1 bg-orange-950/40 -mx-5 -mb-5 p-4 rounded-b-2xl"
                   >
-                    <p className="text-xs font-bold text-orange-400 mb-2 flex items-center gap-1.5">
+                    <p className="text-xs font-bold text-orange-300 mb-2 flex items-center gap-1.5">
                       <Cake size={14} /> Elige la variedad de tu postre:
                     </p>
                     <div className="grid grid-cols-2 gap-2">
@@ -629,7 +889,7 @@ export default function StepPlanSelection({
                             : "bg-stone-900/90 text-stone-300 border-stone-800 hover:border-stone-700"
                         }`}
                       >
-                        🍍 Piña a la Parrilla
+                        🍍 Piña a la Parrilla c/ Helado
                       </button>
                       <button
                         type="button"
@@ -650,49 +910,58 @@ export default function StepPlanSelection({
                 )}
               </div>
 
-              {/* CORDERO AL PALO */}
+              {/* 🐑 EXTRA 4: CORDERO AL PALO */}
               <div
                 onClick={handleToggleCordero}
-                className={`p-4 rounded-2xl border-2 transition-all cursor-pointer group flex flex-col md:flex-row items-center justify-between gap-4 ${
+                className={`p-5 rounded-2xl border-2 transition-all cursor-pointer group flex flex-col md:flex-row items-center justify-between gap-4 ${
                   wantsCordero
-                    ? "border-orange-500 bg-orange-900/10 shadow-[0_0_20px_rgba(249,115,22,0.15)]"
-                    : "border-stone-800 bg-stone-950/60 hover:border-stone-700"
+                    ? "border-orange-500 bg-gradient-to-br from-orange-950/30 via-stone-900/90 to-stone-950 shadow-[0_0_30px_rgba(249,115,22,0.2)]"
+                    : "border-stone-800/90 bg-stone-900/40 hover:border-orange-500/50 hover:bg-stone-900/80"
                 }`}
               >
-                <div className="flex items-center gap-3.5 flex-1">
+                <div className="flex items-start gap-4 flex-1">
                   <div
-                    className={`p-3 rounded-xl shrink-0 transition-colors ${
+                    className={`p-3.5 rounded-2xl shrink-0 transition-all ${
                       wantsCordero
-                        ? "bg-orange-600 text-white shadow-lg"
-                        : "bg-stone-800 text-stone-400"
+                        ? "bg-orange-600 text-white shadow-lg shadow-orange-600/30"
+                        : "bg-stone-800/80 text-orange-400 group-hover:scale-105"
                     }`}
                   >
-                    <Flame size={22} fill={wantsCordero ? "currentColor" : "none"} />
+                    <Flame size={24} fill={wantsCordero ? "currentColor" : "none"} />
                   </div>
                   <div>
-                    <h4 className="font-bold text-base text-white flex items-center gap-2">
-                      {CORDERO_DATA.label}
+                    <div className="flex items-center gap-2">
+                      <span className="text-[9px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-md bg-orange-500/20 text-orange-300 border border-orange-500/30">
+                        Asado Tradicional
+                      </span>
                       {wantsCordero && (
-                        <span className="text-[9px] bg-orange-600 px-2 py-0.5 rounded-full text-white">
-                          AGREGADO
+                        <span className="text-[9px] font-extrabold tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-orange-600 text-white shadow-sm flex items-center gap-1">
+                          <Check size={12} /> AGREGADO
                         </span>
                       )}
+                    </div>
+                    <h4 className="font-bold text-lg text-white mt-1">
+                      {CORDERO_DATA.label}
                     </h4>
-                    <p className="text-stone-400 text-xs mt-0.5 leading-relaxed">
+                    <p className="text-stone-300 text-xs mt-1 leading-relaxed">
                       {CORDERO_DATA.description}
                     </p>
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between md:justify-end gap-4 w-full md:w-auto shrink-0 border-t border-stone-900 md:border-none pt-3 md:pt-0">
-                  <span className="font-bold text-orange-400 text-sm">
-                    +$200.000 Fijo
-                  </span>
+                <div className="flex items-center justify-between md:justify-end gap-4 w-full md:w-auto shrink-0 border-t border-stone-800/60 md:border-none pt-3 md:pt-0">
+                  <div className="text-right">
+                    <span className="font-extrabold text-orange-400 text-base block">
+                      +$200.000 Fijo
+                    </span>
+                    <span className="text-[10px] text-stone-400">Total evento</span>
+                  </div>
                   <button
-                    className={`px-4 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
+                    type="button"
+                    className={`px-4 py-2.5 rounded-xl text-xs font-extrabold transition-all flex items-center gap-1.5 shadow-md ${
                       wantsCordero
                         ? "bg-orange-600 text-white hover:bg-red-600"
-                        : "bg-stone-800 text-stone-200 hover:bg-stone-700"
+                        : "bg-stone-800 text-stone-200 hover:bg-orange-600 hover:text-white"
                     }`}
                   >
                     {wantsCordero ? (
@@ -710,14 +979,14 @@ export default function StepPlanSelection({
             </div>
 
             {/* BOTÓN DE CONFIRMACIÓN AL FINAL DE ADICIONALES */}
-            <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3 bg-stone-900/60 p-4 rounded-2xl border border-stone-800">
-              <div className="text-stone-400 text-xs flex items-center gap-2">
-                <Check size={16} className="text-green-500 shrink-0" />
-                <span>¿Listo con tus adicionales? Avancemos a la fecha y lugar del evento.</span>
+            <div className="pt-3 flex flex-col sm:flex-row items-center justify-between gap-3 bg-stone-900/80 p-4 rounded-2xl border border-stone-800">
+              <div className="text-stone-300 text-xs flex items-center gap-2">
+                <Check size={18} className="text-green-500 shrink-0" />
+                <span>¿Listo con tus adicionales? Avancemos a la fecha y lugar de tu banquete.</span>
               </div>
               <button
                 onClick={() => handleNext(true)}
-                className="w-full sm:w-auto bg-gradient-to-r from-orange-600 to-orange-500 hover:from-orange-500 hover:to-orange-400 text-white font-bold py-3 px-6 rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-orange-900/30 active:scale-[0.98] transition-all text-sm shrink-0"
+                className="w-full sm:w-auto bg-gradient-to-r from-orange-600 to-amber-500 hover:from-orange-500 hover:to-amber-400 text-white font-extrabold py-3.5 px-6 rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-orange-900/40 active:scale-[0.98] transition-all text-sm shrink-0"
               >
                 Continuar a Fecha y Ubicación <ArrowRight size={18} />
               </button>

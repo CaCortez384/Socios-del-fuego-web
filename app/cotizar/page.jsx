@@ -41,6 +41,8 @@ export default function CotizadorPage() {
   const [wantsMobiliario, setWantsMobiliario] = useState(false);
   const [wantsPostres, setWantsPostres] = useState(false);
   const [postreOption, setPostreOption] = useState("pina");
+  const [wantsCoffeeBreak, setWantsCoffeeBreak] = useState(false);
+  const [coffeeBreakOption, setCoffeeBreakOption] = useState("kuchen");
 
   // FIREBASE & HOOKS
   const { bookedDates, bookedDetails, loading, error, toggleDateLock } = useAvailability();
@@ -223,6 +225,10 @@ export default function CotizadorPage() {
                     setWantsPostres={setWantsPostres}
                     postreOption={postreOption}
                     setPostreOption={setPostreOption}
+                    wantsCoffeeBreak={wantsCoffeeBreak}
+                    setWantsCoffeeBreak={setWantsCoffeeBreak}
+                    coffeeBreakOption={coffeeBreakOption}
+                    setCoffeeBreakOption={setCoffeeBreakOption}
                     onNext={() => setStep(2)}
                     onBack={() => {}}
                   />
@@ -254,6 +260,8 @@ export default function CotizadorPage() {
                     wantsMobiliario={wantsMobiliario}
                     wantsPostres={wantsPostres}
                     postreOption={postreOption}
+                    wantsCoffeeBreak={wantsCoffeeBreak}
+                    coffeeBreakOption={coffeeBreakOption}
                     onBack={() => setStep(2)}
                   />
                 )}

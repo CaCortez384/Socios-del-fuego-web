@@ -32,6 +32,8 @@ export default function StepSummary({
   wantsMobiliario,
   wantsPostres,
   postreOption = "pina",
+  wantsCoffeeBreak = false,
+  coffeeBreakOption = "kuchen",
   onBack,
 }) {
   const [userDoubt, setUserDoubt] = useState("");
@@ -42,8 +44,9 @@ export default function StepSummary({
   const corderoTotal = wantsCordero ? CORDERO_DATA.price : 0;
   const mobiliarioTotal = wantsMobiliario ? numGuests * 10000 : 0;
   const postresTotal = wantsPostres ? numGuests * 3500 : 0;
+  const coffeeBreakTotal = wantsCoffeeBreak ? numGuests * 7500 : 0;
   const transportTotal = selectedLocation?.price || 0;
-  const grandTotal = planTotal + corderoTotal + mobiliarioTotal + postresTotal + transportTotal;
+  const grandTotal = planTotal + corderoTotal + mobiliarioTotal + postresTotal + coffeeBreakTotal + transportTotal;
 
   const formattedDate = date ? format(date, "EEEE d 'de' MMMM", { locale: es }) : "";
   const locationName = selectedLocation?.commune || "Ubicación por definir";
@@ -73,6 +76,10 @@ export default function StepSummary({
   const generateWhatsAppLink = () => {
     if (!date || !selectedPlan) return "#";
     const extrasList = [];
+    if (wantsCoffeeBreak) {
+      const sweetLabel = coffeeBreakOption === "kuchen" ? "Kuchen Nuez" : "Pie Limón";
+      extrasList.push(`☕ Coffee Break / Desayuno (${sweetLabel}): $${coffeeBreakTotal.toLocaleString("es-CL")} ($7.500 p/p)`);
+    }
     if (wantsMobiliario) {
       extrasList.push(`🪑 Mobiliario Completo: $${mobiliarioTotal.toLocaleString("es-CL")} ($10.000 p/p)`);
     }
@@ -287,6 +294,19 @@ export default function StepSummary({
                   ${planTotal.toLocaleString("es-CL")}
                 </span>
               </div>
+              {wantsCoffeeBreak && (
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <Plus className="w-4 h-4 text-amber-500" />
+                    <span className="text-sm text-stone-300">
+                      Coffee Break / Desayuno ({coffeeBreakOption === "kuchen" ? "Kuchen Nuez" : "Pie Limón"}) ($7.500 p/p)
+                    </span>
+                  </div>
+                  <span className="text-sm text-stone-400 font-mono">
+                    ${coffeeBreakTotal.toLocaleString("es-CL")}
+                  </span>
+                </div>
+              )}
               {wantsMobiliario && (
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
@@ -459,28 +479,51 @@ export default function StepSummary({
             onClick={() => {
               // 1. GA4 y Meta Pixel unificado: EVENTO PURCHASE
               const uniqueTransactionId = `COT-${new Date().getTime()}`;
+              const purchaseItems = [
+                {
+                  item_id: selectedPlan?.id,
+                  item_name: selectedPlan?.name,
+                  item_category: selectedPlan?.category === "al_plato" ? "Carne al Plato" : selectedPlan?.category === "picar" ? "Solo Picoteo" : "Servicio Buffet",
+                  price: selectedPlan?.pricePerPerson,
+                  quantity: numGuests,
+                },
+                wantsCoffeeBreak && {
+                  item_id: "coffeebreak-extra",
+                  item_name: `Coffee Break / Desayuno (${coffeeBreakOption === "kuchen" ? "Kuchen Nuez" : "Pie Limón"})`,
+                  item_category: "Adicionales",
+                  price: 7500,
+                  quantity: numGuests,
+                },
+                wantsMobiliario && {
+                  item_id: "mobiliario-extra",
+                  item_name: "Mobiliario Completo",
+                  item_category: "Adicionales",
+                  price: 10000,
+                  quantity: numGuests,
+                },
+                wantsPostres && {
+                  item_id: "postres-extra",
+                  item_name: `Postres (${postreOption === "pina" ? "Piña a la Parrilla" : "Frutillas c/ Crema"})`,
+                  item_category: "Adicionales",
+                  price: 3500,
+                  quantity: numGuests,
+                },
+                wantsCordero && {
+                  item_id: "cordero-extra",
+                  item_name: CORDERO_DATA.label,
+                  item_category: "Adicionales",
+                  price: CORDERO_DATA.price,
+                  quantity: 1,
+                },
+              ].filter(Boolean);
+
               trackCotizacion("purchase", {
                 transaction_id: uniqueTransactionId,
                 value: grandTotal,
                 currency: "CLP",
                 tax: 0,
                 shipping: transportTotal,
-                items: [
-                  {
-                    item_id: selectedPlan?.id,
-                    item_name: selectedPlan?.name,
-                    price: selectedPlan?.pricePerPerson,
-                    quantity: numGuests,
-                  },
-                  wantsCordero
-                    ? {
-                      item_id: "cordero-extra",
-                      item_name: "Cordero al Palo",
-                      price: 200000,
-                      quantity: 1,
-                    }
-                    : undefined,
-                ].filter(Boolean),
+                items: purchaseItems,
               });
             }}
             className="flex-1 bg-[#25D366] hover:bg-[#128C7E] text-white font-bold h-14 rounded-2xl flex items-center justify-center gap-2 transition-all shadow-lg active:scale-[0.98] animate-in slide-in-from-bottom-5"
