@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import {
@@ -46,11 +47,16 @@ import Image from "next/image";
 import { trackCotizacion } from "@/lib/utils";
 import LogoLink from "@/components/cotizador/LogoLink";
 import { usePlans } from "@/hooks/usePlans";
+import { PLANS as STATIC_PLANS, ADDONS_DATA } from "@/lib/plans";
+
+const minPrice = Math.min(...STATIC_PLANS.filter(p => p.active !== false).map(p => p.pricePerPerson));
+const formattedMinPrice = new Intl.NumberFormat('es-CL').format(minPrice);
 
 const COTIZAR_URL = "/cotizar";
 
 export default function Page() {
   const { plans: PLANS, loadingPlans } = usePlans();
+  const [activeCategory, setActiveCategory] = useState("full");
 
   const fadeInUp = {
     hidden: { opacity: 0, y: 30 },
@@ -82,7 +88,7 @@ export default function Page() {
         <section className="relative min-h-[85vh] w-full flex items-center justify-center overflow-hidden border-b border-stone-800">
           <div className="absolute inset-0 bg-stone-900 z-0">
             <Image
-              src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?q=80&w=2000&auto=format&fit=crop"
+              src="/hero-bg.webp"
               alt="Asados Premium a Domicilio"
               fill
               priority
@@ -105,6 +111,12 @@ export default function Page() {
                 <span className="text-orange-600">EN SANTIAGO, V Y VI REGIÓN</span>
               </h1>
 
+              <div className="mb-6 flex flex-col items-center gap-2">
+                <span className="inline-block bg-stone-900/80 backdrop-blur-sm border border-orange-500/30 text-white font-oswald text-2xl md:text-3xl uppercase px-6 py-2 rounded-lg shadow-[0_0_15px_rgba(234,88,12,0.2)]">
+                  Planes desde <span className="text-orange-500 font-bold">${formattedMinPrice}</span> p/p
+                </span>
+              </div>
+
               <p className="text-lg md:text-2xl text-stone-100 mb-6 max-w-3xl mx-auto font-light border-l-4 border-orange-600 pl-4 md:pl-0 md:border-l-0">
                 Especialistas en Matrimonios Campestres, Eventos de Empresa y Celebraciones Privadas.
               </p>
@@ -117,12 +129,16 @@ export default function Page() {
                 <div className="h-px w-12 bg-orange-600/50 hidden md:block"></div>
               </div>
 
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="flex flex-col items-center gap-4">
                 <Button asChild size="lg" className="bg-orange-600 hover:bg-orange-700 text-white text-lg px-10 py-8 h-auto font-oswald uppercase tracking-wider shadow-[0_0_30px_rgba(234,88,12,0.4)] animate-pulse">
                   <Link href={COTIZAR_URL} onClick={() => trackCotizacion("generate_lead", { lead_source: "hero" })}>
                     Cotizar Disponibilidad
                   </Link>
                 </Button>
+                <p className="text-stone-300 font-medium text-sm md:text-base">
+                  <Check className="inline-block w-4 h-4 mr-1 text-orange-500" />
+                  Llevamos la parrilla y los insumos. Tú solo disfruta.
+                </p>
               </motion.div>
             </motion.div>
           </div>
@@ -164,21 +180,75 @@ export default function Page() {
 
         {/* C. PLANES (CON EVENTOS ECOMMERCE) */}
         <section id="experiencias" className="py-24 bg-stone-950 container mx-auto px-4 scroll-mt-24">
-          <div className="text-center mb-16">
+          <div className="text-center mb-10">
             <h2 className="font-oswald text-4xl font-bold text-white mb-4 uppercase">Nuestros Planes</h2>
             <Separator className="w-20 bg-orange-600 h-1 mx-auto rounded-full" />
             <p className="mt-4 text-stone-400">Haz clic en cualquier plan para ver el menú detallado.</p>
           </div>
 
+          <div className="flex flex-wrap justify-center gap-2 mb-10">
+            {[
+              { id: "full", label: "Asado Buffet" },
+              { id: "al_plato", label: "Menú al Plato" },
+              { id: "picar", label: "Solo Picar" },
+              { id: "extras", label: "Extras & Adicionales" },
+            ].map((cat) => (
+              <button
+                key={cat.id}
+                onClick={() => setActiveCategory(cat.id)}
+                className={`px-6 py-2.5 rounded-full font-oswald uppercase tracking-wider text-sm transition-all duration-300 ${
+                  activeCategory === cat.id
+                    ? "bg-orange-600 text-white shadow-[0_0_15px_rgba(234,88,12,0.4)] scale-105"
+                    : "bg-stone-900 text-stone-400 border border-stone-800 hover:border-orange-500/50 hover:text-orange-400"
+                }`}
+              >
+                {cat.label}
+              </button>
+            ))}
+          </div>
+
           {loadingPlans ? (
-            <div className="flex justify-center items-center py-20 animate-pulse flex-col space-y-4">
-              <div className="w-12 h-12 border-4 border-stone-800 border-t-orange-500 rounded-full animate-spin"></div>
-              <p className="text-stone-500 text-sm font-bold uppercase tracking-widest">Cargando menús...</p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+              {[1, 2, 3].map((i) => (
+                <Card key={i} className="bg-stone-900 border-stone-800 flex flex-col h-[400px] animate-pulse">
+                  <div className="p-6 pb-0 flex-1 flex flex-col gap-4">
+                    <div className="h-8 bg-stone-800 rounded w-2/3"></div>
+                    <div className="h-4 bg-stone-800 rounded w-1/3"></div>
+                    <div className="mt-4 space-y-3 flex-1">
+                      {[1, 2, 3, 4].map((j) => (
+                        <div key={j} className="flex gap-2">
+                          <div className="h-4 w-4 bg-stone-800 rounded-full shrink-0"></div>
+                          <div className="h-4 bg-stone-800 rounded w-full"></div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="p-6 mt-auto">
+                    <div className="h-10 bg-stone-800 rounded w-full"></div>
+                  </div>
+                </Card>
+              ))}
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-              {PLANS.filter(plan => plan.category === "full" && plan.active !== false).map((plan) => (
-                <Dialog key={plan.id}>
+              {activeCategory === "extras" ? (
+                Object.values(ADDONS_DATA).map((addon) => (
+                  <Card key={addon.id} className="bg-stone-900 border-stone-800 flex flex-col relative transition-all duration-300 hover:border-orange-500/50">
+                    <div className="p-6 flex-1 flex flex-col">
+                      <h3 className="font-oswald text-2xl text-white font-semibold leading-none tracking-tight mb-2">{addon.label}</h3>
+                      <p className="text-stone-400 text-sm mb-6 flex-1">{addon.description}</p>
+                      <div className="mt-auto pt-4 border-t border-stone-800">
+                        <div className="flex items-baseline gap-1">
+                          <span className="text-3xl font-bold text-white">${new Intl.NumberFormat('es-CL').format(addon.pricePerPerson || addon.price)}</span>
+                          <span className="text-sm font-medium text-stone-400">{addon.pricePerPerson ? "p/p" : "total"}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </Card>
+                ))
+              ) : (
+                PLANS.filter(plan => plan.category === activeCategory && plan.active !== false).map((plan) => (
+                  <Dialog key={plan.id}>
                   <Card className={`bg-stone-900 border-stone-800 flex flex-col relative transition-all duration-300 hover:border-stone-600 ${plan.recommended ? 'shadow-[0_0_20px_rgba(2,132,199,0.15)] border-sky-600/50 hover:border-sky-500' : ''}`}>
 
                     {plan.recommended && (
@@ -196,8 +266,10 @@ export default function Page() {
                           <h3 className="font-oswald text-2xl text-white font-semibold leading-none tracking-tight group-hover:text-orange-400 transition-colors">{plan.name}</h3>
                           <p className="text-stone-400 mt-1 text-sm">{plan.totalWeight}</p>
                           <div className="mt-4 flex items-baseline gap-1">
-                            <span className="text-sm font-bold text-orange-400">Precio variable según requerimientos y asistentes</span>
+                            <span className="text-3xl font-bold text-white">${new Intl.NumberFormat('es-CL').format(plan.pricePerPerson)}</span>
+                            <span className="text-sm font-medium text-stone-400">p/p</span>
                           </div>
+                          <p className="text-xs text-orange-500/80 mt-1 font-medium">* Precio base referencial</p>
                         </div>
 
                         <ul className="space-y-3 text-sm text-stone-300 mb-4 flex-1">
@@ -316,7 +388,8 @@ export default function Page() {
                     </DialogContent>
                   </Card>
                 </Dialog>
-              ))}
+                ))
+              )}
             </div>
           )}
         </section>
@@ -343,7 +416,7 @@ export default function Page() {
               </div>
 
               <div className="md:w-1/2 h-64 md:h-80 w-full bg-stone-800 rounded-xl flex items-center justify-center border border-stone-700 relative overflow-hidden group">
-                <Image src="/cordero.webp" alt="Cordero al Palo" fill className="object-cover opacity-80 group-hover:scale-105 transition-transform duration-700" />
+                <Image src="/cordero.webp" alt="Cordero al Palo" fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover opacity-80 group-hover:scale-105 transition-transform duration-700" />
                 <span className="relative z-10 text-stone-200 font-oswald text-xl uppercase tracking-widest bg-black/50 px-4 py-2 rounded backdrop-blur-sm border border-white/10">
                   Cocción Lenta Vertical
                 </span>

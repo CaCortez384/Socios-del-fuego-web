@@ -150,7 +150,7 @@ export default function RootLayout({
 
 
         {/* --- META PIXEL (NUEVO ID) --- */}
-        <Script id="facebook-pixel" strategy="afterInteractive">
+        <Script id="facebook-pixel" strategy="lazyOnload">
           {`
     !function(f,b,e,v,n,t,s){
       if(f.fbq) return;
@@ -178,7 +178,7 @@ export default function RootLayout({
         />
 
         {/* --- MICROSOFT CLARITY --- */}
-        <Script id="microsoft-clarity" strategy="afterInteractive">
+        <Script id="microsoft-clarity" strategy="lazyOnload">
           {`
             (function(c,l,a,r,i,t,y){
                 c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
