@@ -239,8 +239,8 @@ export default function Page() {
                       <p className="text-stone-400 text-sm mb-6 flex-1">{addon.description}</p>
                       <div className="mt-auto pt-4 border-t border-stone-800">
                         <div className="flex items-baseline gap-1">
-                          <span className="text-3xl font-bold text-white">${new Intl.NumberFormat('es-CL').format(addon.pricePerPerson || addon.price)}</span>
-                          <span className="text-sm font-medium text-stone-400">{addon.pricePerPerson ? "p/p" : "total"}</span>
+                          <span className="text-3xl font-bold text-white">${new Intl.NumberFormat('es-CL').format((addon as any).pricePerPerson || (addon as any).price)}</span>
+                          <span className="text-sm font-medium text-stone-400">{(addon as any).pricePerPerson ? "p/p" : "total"}</span>
                         </div>
                       </div>
                     </div>
