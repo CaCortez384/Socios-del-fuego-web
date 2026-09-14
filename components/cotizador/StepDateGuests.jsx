@@ -16,7 +16,6 @@ import {
   ZoomOut,
   Flame,
 } from "lucide-react";
-import { TRANSPORT_ZONES } from "@/lib/plans";
 import { trackCotizacion } from "@/lib/utils";
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -35,16 +34,6 @@ export default function StepDateGuests({
   onNext,
   onBack,
 }) {
-  const [activeZoneIndex, setActiveZoneIndex] = useState(() => {
-    if (selectedLocation?.zoneName) {
-      const idx = TRANSPORT_ZONES.findIndex(
-        (z) => z.name === selectedLocation.zoneName,
-      );
-      return idx >= 0 ? idx : "";
-    }
-    return "";
-  });
-
   const [selectedImage, setSelectedImage] = useState(null);
   const [zoomLevel, setZoomLevel] = useState(1);
 
@@ -74,23 +63,6 @@ export default function StepDateGuests({
         : "bg-stone-800 text-stone-600 cursor-not-allowed line-through";
     }
     return "hover:bg-orange-600 hover:text-white transition-colors rounded-full font-medium";
-  };
-
-  const handleZoneChange = (e) => {
-    const idx = e.target.value;
-    setActiveZoneIndex(idx);
-    setSelectedLocation(null);
-  };
-
-  const handleCommuneChange = (e) => {
-    const communeName = e.target.value;
-    if (activeZoneIndex === "") return;
-    const zone = TRANSPORT_ZONES[activeZoneIndex];
-    setSelectedLocation({
-      zoneName: zone.name,
-      commune: communeName,
-      price: zone.price,
-    });
   };
 
   const handleGuestsBlur = () => {
@@ -229,38 +201,13 @@ export default function StepDateGuests({
             </label>
 
             <div className="relative w-full">
-              <select
-                value={selectedLocation ? JSON.stringify(selectedLocation) : ""}
-                onChange={(e) => {
-                  if (e.target.value === "") {
-                    setSelectedLocation(null);
-                  } else {
-                    setSelectedLocation(JSON.parse(e.target.value));
-                  }
-                }}
-                className="w-full bg-stone-950 border border-stone-800 rounded-xl p-3 md:p-4 text-sm md:text-base text-white appearance-none focus:outline-none focus:border-orange-500 transition-colors cursor-pointer"
-              >
-                <option value="">Selecciona tu Sector/Comuna...</option>
-                {TRANSPORT_ZONES.map((zone, idx) => (
-                  <optgroup key={idx} label={`${zone.name} ($${zone.price.toLocaleString("es-CL")})`}>
-                    {zone.communes.map((com, i) => (
-                      <option
-                        key={`${idx}-${i}`}
-                        value={JSON.stringify({
-                          zoneName: zone.name,
-                          commune: com,
-                          price: zone.price,
-                        })}
-                      >
-                        {com}
-                      </option>
-                    ))}
-                  </optgroup>
-                ))}
-              </select>
-              <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-stone-500">
-                <ChevronRight className="rotate-90 w-4 h-4" />
-              </div>
+              <input
+                type="text"
+                placeholder="Ej: Las Condes, Santiago"
+                value={typeof selectedLocation === "string" ? selectedLocation : selectedLocation?.commune || ""}
+                onChange={(e) => setSelectedLocation(e.target.value)}
+                className="w-full bg-stone-950 border border-stone-800 rounded-xl p-3 md:p-4 text-sm md:text-base text-white focus:outline-none focus:border-orange-500 transition-colors"
+              />
             </div>
             {/* --- URGENCY BANNER --- */}
             {date && (() => {
@@ -319,16 +266,17 @@ export default function StepDateGuests({
             </button>
 
             <button
-              disabled={!date || !isGuestsValid || !selectedLocation?.commune}
+              disabled={!date || !isGuestsValid || !selectedLocation}
               onClick={() => {
                 // EVENTO GA4: Registro de datos logísticos antes de pasar al resumen
+                const locStr = typeof selectedLocation === "string" ? selectedLocation : selectedLocation?.commune;
                 trackCotizacion("add_shipping_info", {
-                  shipping_tier: selectedLocation?.zoneName,
-                  value: selectedLocation?.price,
+                  shipping_tier: "A cotizar",
+                  value: 0,
                   currency: "CLP",
                   event_date: format(date, "yyyy-MM-dd"),
                   guest_count: guestsNum,
-                  commune: selectedLocation?.commune,
+                  commune: locStr,
                 });
 
                 // Continuar al siguiente paso

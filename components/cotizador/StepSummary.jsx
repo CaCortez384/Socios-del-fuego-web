@@ -45,13 +45,13 @@ export default function StepSummary({
   const mobiliarioTotal = wantsMobiliario ? numGuests * 10000 : 0;
   const postresTotal = wantsPostres ? numGuests * 3500 : 0;
   const coffeeBreakTotal = wantsCoffeeBreak ? numGuests * 7500 : 0;
-  const transportTotal = selectedLocation?.price || 0;
+  const transportTotal = (typeof selectedLocation === "object" && selectedLocation?.price) ? selectedLocation.price : 0;
   const grandTotal = planTotal + corderoTotal + mobiliarioTotal + postresTotal + coffeeBreakTotal + transportTotal;
 
   const formattedDate = date ? format(date, "EEEE d 'de' MMMM", { locale: es }) : "";
-  const locationName = selectedLocation?.commune || "Ubicación por definir";
-  const zoneName = selectedLocation?.zoneName || "Zona por definir";
-  const isCustomTransport = selectedLocation?.price === 0;
+  const locationName = typeof selectedLocation === "string" ? selectedLocation : selectedLocation?.commune || "Ubicación por definir";
+  const zoneName = typeof selectedLocation === "object" ? selectedLocation?.zoneName || "A cotizar" : "A cotizar";
+  const isCustomTransport = transportTotal === 0;
   const transportText = "Traslado: A cotizar según ubicación";
   const totalLabel = isCustomTransport ? "TOTAL (Sin traslado)" : "TOTAL WEB";
   const cleanPhone = CONTACT_INFO.phone.replace(/[^0-9]/g, "");
@@ -147,7 +147,7 @@ export default function StepSummary({
                 {numGuests} invitados • Incluye insumos y servicio completo
               </span>
             </div>
-            {selectedLocation?.price === 0 && (
+            {isCustomTransport && (
               <p className="text-[10px] text-stone-500 mt-[-10px]">
                 * Traslado por confirmar según ubicación exacta.
               </p>
@@ -268,10 +268,12 @@ export default function StepSummary({
                     Ubicación
                   </p>
                   <p className="text-sm text-white font-medium">
-                    {selectedLocation?.commune || "---"}{" "}
-                    <span className="text-stone-500 font-normal">
-                      ({selectedLocation?.zoneName})
-                    </span>
+                    {locationName}{" "}
+                    {zoneName !== "A cotizar" && (
+                      <span className="text-stone-500 font-normal">
+                        ({zoneName})
+                      </span>
+                    )}
                   </p>
                 </div>
               </div>
@@ -350,7 +352,7 @@ export default function StepSummary({
                 <div className="flex items-center gap-3">
                   <Truck className="w-4 h-4 text-stone-500" />
                   <span className="text-sm text-stone-300">
-                    Traslado ({selectedLocation?.commune || "Ubicación"})
+                    Traslado ({locationName})
                   </span>
                 </div>
                 <span className="text-sm text-stone-200 font-mono font-bold">
@@ -444,7 +446,7 @@ export default function StepSummary({
                   ${grandTotal.toLocaleString("es-CL")}
                 </span>
               </div>
-              {selectedLocation?.price === 0 && (
+              {isCustomTransport && (
                 <p className="text-xs text-gray-500 text-right">
                   * Traslado por convenir según dirección exacta.
                 </p>
