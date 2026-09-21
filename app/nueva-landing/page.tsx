@@ -12,7 +12,6 @@ import {
   Phone,
   ChefHat,
   Sparkles,
-  Star,
   Users,
   Clock,
   ChevronDown,
@@ -48,30 +47,21 @@ const GALLERY_IMAGES = [
   { src: "/galeria/preview.jpg", title: "Experiencia Completa", desc: "Montaje rústico para eventos de alta gama" },
 ];
 
-const TESTIMONIALS = [
+const SERVICE_PILLARS = [
   {
-    name: "Catalina & Tomás",
-    event: "Matrimonio Campestre en Talagante",
-    guests: "90 invitados",
-    comment:
-      "El cordero al palo fue el centro de atención absoluto de nuestra boda. La carne se deshacía sola y los maestros parrilleros fueron impecables en la atención. Cero preocupaciones durante la fiesta.",
-    rating: 5,
+    title: "Puntualidad & Montaje Autónomo",
+    tag: "Cero Estrés",
+    desc: "Llegamos con 2 a 3 horas de anticipación. Llevamos nuestras propias parrillas, carbón de espino y herramientas. No necesitas prestarnos nada ni preocuparte por el encendido del fuego.",
   },
   {
-    name: "Rodrigo Morales",
-    event: "Kickoff Corporativo en Las Condes",
-    guests: "65 colaboradores",
-    comment:
-      "Necesitábamos factura al día, puntualidad estricta y comida de nivel para nuestra gerencia. Socios del Fuego cumplió en todo con creces. El Lomo Vetado Angus estuvo memorable.",
-    rating: 5,
+    title: "Cortes Angus & Libre Pastoreo",
+    tag: "Calidad Seleccionada",
+    desc: "Solo trabajamos con Lomo Vetado, Punta de Ganso y Corderos seleccionados. Manejamos tiempos de reposo y cocción exacta para que cada corte se sirva tierno y en su punto.",
   },
   {
-    name: "Matías Vial",
-    event: "Celebración 40 Años en Chicureo",
-    guests: "45 invitados",
-    comment:
-      "La mejor decisión que tomé. Pude estar con mis amigos tomando un trago sin tocar las tenazas ni preocuparme del humo. Llegaron con todo su equipo y dejaron el quincho impecable.",
-    rating: 5,
+    title: "Tú Eres un Invitado Más",
+    tag: "Disfruta al 100%",
+    desc: "Olvídate de estar amarrado a la parrilla, con olor a humo en tu ropa o preocupado de que falte comida. Nuestro equipo se encarga de servir y dejar el área de trabajo impecable.",
   },
 ];
 
@@ -132,7 +122,7 @@ export default function NuevaLandingPage() {
               <Flame className="w-4 h-4" /> Cordero al Palo
             </a>
             <a href="#galeria" className="hover:text-orange-400 transition-colors">Galería</a>
-            <a href="#testimonios" className="hover:text-orange-400 transition-colors">Opiniones</a>
+            <a href="#pilares" className="hover:text-orange-400 transition-colors">Por Qué Elegirnos</a>
             <a href="#zonas" className="hover:text-orange-400 transition-colors">Cobertura</a>
             <Link href="/blog" className="hover:text-orange-400 transition-colors">Blog Parrillero</Link>
           </div>
@@ -173,23 +163,21 @@ export default function NuevaLandingPage() {
           </div>
 
           <div className="relative z-10 container mx-auto px-4 py-16 md:py-24 text-center max-w-5xl">
-            {/* Tag de prueba social y credenciales */}
+            {/* Tag de Especialidad & Propuesta de Valor Honesta */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="inline-flex flex-wrap items-center justify-center gap-2 px-4 py-1.5 rounded-full bg-stone-900/90 border border-orange-500/40 text-xs font-semibold text-stone-200 mb-8 backdrop-blur-md shadow-[0_0_25px_rgba(234,88,12,0.2)]"
+              className="inline-flex items-center gap-2.5 px-5 py-2 rounded-full bg-stone-900/95 border border-orange-500/40 text-xs md:text-sm font-medium text-stone-200 mb-8 backdrop-blur-md shadow-[0_0_25px_rgba(234,88,12,0.2)]"
             >
-              <span className="flex items-center text-yellow-400">
-                <Star className="w-3.5 h-3.5 fill-yellow-400" />
-                <Star className="w-3.5 h-3.5 fill-yellow-400" />
-                <Star className="w-3.5 h-3.5 fill-yellow-400" />
-                <Star className="w-3.5 h-3.5 fill-yellow-400" />
-                <Star className="w-3.5 h-3.5 fill-yellow-400" />
+              <Flame className="w-4 h-4 text-orange-500 animate-pulse shrink-0" />
+              <span className="font-oswald uppercase tracking-wider text-orange-400 font-bold">
+                Asados a Domicilio & Cordero al Palo
               </span>
-              <span className="text-white font-bold">4.9/5</span>
-              <span className="text-stone-500">·</span>
-              <span className="text-orange-400 font-bold uppercase tracking-wider">Más de 150 eventos exitosos</span>
+              <span className="text-stone-600 hidden sm:inline">|</span>
+              <span className="text-stone-300 hidden sm:inline text-xs">
+                Santiago, Melipilla, V y VI Región
+              </span>
             </motion.div>
 
             {/* Titular Principal */}
@@ -598,38 +586,37 @@ export default function NuevaLandingPage() {
           </div>
         </section>
 
-        {/* 8. TESTIMONIOS Y RESEÑAS */}
-        <section id="testimonios" className="py-24 bg-stone-900/70 border-b border-stone-800 scroll-mt-24">
+        {/* 8. PILARES DE SERVICIO */}
+        <section id="pilares" className="py-24 bg-stone-900/70 border-b border-stone-800 scroll-mt-24">
           <div className="container mx-auto px-4 max-w-6xl">
             <div className="text-center mb-16">
               <span className="text-xs uppercase font-oswald tracking-widest text-orange-400 font-bold">
-                Testimonios Reales
+                El Estándar Socios del Fuego
               </span>
               <h2 className="font-oswald text-4xl md:text-5xl font-bold text-white mb-4 uppercase mt-2">
-                Lo que dicen quienes ya nos contrataron
+                ¿Por qué elegir nuestro servicio?
               </h2>
               <p className="text-stone-400 max-w-xl mx-auto text-sm md:text-base">
-                La tranquilidad de nuestros clientes es nuestro mayor sello de calidad.
+                La tranquilidad de un evento gastronómico sin contratiempos, con respaldo y carnes de primera calidad.
               </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {TESTIMONIALS.map((t, idx) => (
-                <div key={idx} className="bg-stone-950 border border-stone-800/80 p-8 rounded-2xl flex flex-col justify-between shadow-xl">
+              {SERVICE_PILLARS.map((p, idx) => (
+                <div key={idx} className="bg-stone-950 border border-stone-800/80 p-8 rounded-2xl flex flex-col justify-between shadow-xl hover:border-orange-500/40 transition-all group">
                   <div>
-                    <div className="flex items-center gap-1 text-yellow-400 mb-4">
-                      {[...Array(t.rating)].map((_, i) => (
-                        <Star key={i} className="w-4 h-4 fill-yellow-400" />
-                      ))}
+                    <div className="inline-block bg-orange-950/60 border border-orange-600/30 text-orange-400 text-xs font-oswald uppercase tracking-wider font-bold px-3 py-1 rounded-full mb-6">
+                      {p.tag}
                     </div>
-                    <p className="text-stone-300 text-sm italic leading-relaxed mb-6">
-                      &ldquo;{t.comment}&rdquo;
+                    <h3 className="font-oswald text-2xl font-bold text-white uppercase mb-3 group-hover:text-orange-400 transition-colors">
+                      {p.title}
+                    </h3>
+                    <p className="text-stone-300 text-sm leading-relaxed">
+                      {p.desc}
                     </p>
                   </div>
-                  <div className="pt-4 border-t border-stone-800">
-                    <div className="font-oswald text-white font-bold uppercase">{t.name}</div>
-                    <div className="text-xs text-orange-400 font-medium">{t.event}</div>
-                    <div className="text-xs text-stone-500 mt-0.5">{t.guests}</div>
+                  <div className="pt-6 border-t border-stone-800/80 mt-6 flex items-center gap-2 text-xs text-orange-500 font-bold uppercase tracking-wider">
+                    <CheckCircle2 className="w-4 h-4" /> Compromiso de Calidad
                   </div>
                 </div>
               ))}
