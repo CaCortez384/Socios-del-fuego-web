@@ -13,7 +13,6 @@ import {
   Flame,
   Truck,
   Plus,
-  FileText,
   UtensilsCrossed,
   HelpCircle,
   Send,
@@ -52,8 +51,6 @@ export default function StepSummary({
   const locationName = typeof selectedLocation === "string" ? selectedLocation : selectedLocation?.commune || "Ubicación por definir";
   const zoneName = typeof selectedLocation === "object" ? selectedLocation?.zoneName || "A cotizar" : "A cotizar";
   const isCustomTransport = transportTotal === 0;
-  const transportText = "Traslado: A cotizar según ubicación";
-  const totalLabel = isCustomTransport ? "TOTAL (Sin traslado)" : "TOTAL WEB";
   const cleanPhone = CONTACT_INFO.phone.replace(/[^0-9]/g, "");
 
 

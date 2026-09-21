@@ -5,7 +5,7 @@ import { PLANS as FALLBACK_PLANS } from '@/lib/plans';
 
 export function usePlans() {
   const [plans, setPlans] = useState(FALLBACK_PLANS);
-  const [loadingPlans, setLoadingPlans] = useState(true);
+  const [loadingPlans, setLoadingPlans] = useState(false);
   const [errorPlans, setErrorPlans] = useState<string | null>(null);
 
   useEffect(() => {

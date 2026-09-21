@@ -36,4 +36,4 @@ En **Socios del Fuego**, creemos que la variedad hace al asado perfecto. Por eso
 Además, complementamos con Malaya de Cerdo y Longanizas Artesanales para el picoteo inicial. No te preocupes por el punto de cocción; de eso nos encargamos nosotros. Tú solo preocúpate de tener la copa llena.
 
 ### ¿Te dio hambre?
-Revisa nuestros menús completos aquí y arma tu parrilla ideal.
+Revisa nuestros menús completos [aquí](/cotizar) y arma tu parrilla ideal.

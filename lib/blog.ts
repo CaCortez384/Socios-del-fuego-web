@@ -49,7 +49,7 @@ export function getPostBySlug(slug: string): Post | null {
       content,
       ...(data as { title: string; date: string; excerpt: string; image?: string; tags?: string[] }),
     };
-  } catch (error) {
+  } catch {
     return null;
   }
 }

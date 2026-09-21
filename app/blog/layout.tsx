@@ -1,8 +1,6 @@
 import Link from "next/link";
-import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { Home, ArrowLeft } from "lucide-react";
-import { trackCotizacion } from "@/lib/utils"; // Ajusta la ruta si es necesario
+import { ArrowLeft } from "lucide-react";
 import LogoLink from "@/components/cotizador/LogoLink";
 export default function BlogLayout({
   children,

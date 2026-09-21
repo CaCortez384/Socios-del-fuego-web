@@ -9,9 +9,6 @@ import {
   MapPin,
   Instagram,
   Phone,
-  Star,
-  CalendarDays,
-  Users,
   ChefHat,
   Beef,
   Salad,
@@ -232,20 +229,26 @@ export default function Page() {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
               {activeCategory === "extras" ? (
-                Object.values(ADDONS_DATA).map((addon) => (
-                  <Card key={addon.id} className="bg-stone-900 border-stone-800 flex flex-col relative transition-all duration-300 hover:border-orange-500/50">
-                    <div className="p-6 flex-1 flex flex-col">
-                      <h3 className="font-oswald text-2xl text-white font-semibold leading-none tracking-tight mb-2">{addon.label}</h3>
-                      <p className="text-stone-400 text-sm mb-6 flex-1">{addon.description}</p>
-                      <div className="mt-auto pt-4 border-t border-stone-800">
-                        <div className="flex items-baseline gap-1">
-                          <span className="text-3xl font-bold text-white">${new Intl.NumberFormat('es-CL').format((addon as any).pricePerPerson || (addon as any).price)}</span>
-                          <span className="text-sm font-medium text-stone-400">{(addon as any).pricePerPerson ? "p/p" : "total"}</span>
+                Object.values(ADDONS_DATA).map((addon) => {
+                  const item = addon as { id: string; label: string; description: string; pricePerPerson?: number; price?: number };
+                  const priceVal = item.pricePerPerson ?? item.price ?? 0;
+                  const priceSuffix = item.pricePerPerson ? "p/p" : "total";
+
+                  return (
+                    <Card key={item.id} className="bg-stone-900 border-stone-800 flex flex-col relative transition-all duration-300 hover:border-orange-500/50">
+                      <div className="p-6 flex-1 flex flex-col">
+                        <h3 className="font-oswald text-2xl text-white font-semibold leading-none tracking-tight mb-2">{item.label}</h3>
+                        <p className="text-stone-400 text-sm mb-6 flex-1">{item.description}</p>
+                        <div className="mt-auto pt-4 border-t border-stone-800">
+                          <div className="flex items-baseline gap-1">
+                            <span className="text-3xl font-bold text-white">${new Intl.NumberFormat('es-CL').format(priceVal)}</span>
+                            <span className="text-sm font-medium text-stone-400">{priceSuffix}</span>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </Card>
-                ))
+                    </Card>
+                  );
+                })
               ) : (
                 PLANS.filter(plan => plan.category === activeCategory && plan.active !== false).map((plan) => (
                   <Dialog key={plan.id}>

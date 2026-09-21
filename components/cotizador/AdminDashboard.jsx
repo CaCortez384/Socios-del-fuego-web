@@ -4,7 +4,7 @@ import { useState, useMemo } from 'react';
 import DatePicker, { registerLocale } from 'react-datepicker';
 import es from 'date-fns/locale/es';
 import { format, parseISO, isAfter } from 'date-fns';
-import { LogOut, Calendar, ShieldCheck, Trash2, User, FileText, Eye, Upload, Utensils, Users, MapPin, Phone, Tag, ChevronDown, ChevronUp, DollarSign, Hash, PartyPopper, X } from 'lucide-react';
+import { LogOut, Calendar, ShieldCheck, Trash2, User, FileText, Eye, Upload, Utensils, Users, MapPin, Phone, ChevronDown, ChevronUp, DollarSign, Hash, PartyPopper, X } from 'lucide-react';
 import { getAuth, signOut } from "firebase/auth";
 import { collection, doc, setDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';

@@ -35,4 +35,4 @@ Para un **Kick off 2026** exitoso, recomendamos nuestro plan **Fuego Total**. Es
 Si buscas **catering para empresas en Las Condes**, Ciudad Empresarial o alrededores, somos tu mejor aliado.
 
 ### ¿Planeando el Kick-off?
-Cotiza con factura aquí y empieza el año con el equipo motivado.
+[Cotiza con factura aquí](/cotizar) y empieza el año con el equipo motivado.

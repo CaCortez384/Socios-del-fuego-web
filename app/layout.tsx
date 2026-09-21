@@ -17,13 +17,13 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://sociosdelfuego.cl"),
+  metadataBase: new URL("https://socios-del-fuego.vercel.app"),
   title: {
     default: "Socios del Fuego | Asados Premium a Domicilio",
     template: "%s | Socios del Fuego",
   },
   description:
-    "Servicio de asado a domicilio en Melipilla, Santiago, Litoral Central y V Región. Planes desde $20.000 p/p. Especialistas en Cordero al Palo.",
+    "Servicio de asado a domicilio en Melipilla, Santiago, Litoral Central y V Región. Planes desde $28.000 p/p. Especialistas en Cordero al Palo.",
   keywords: [
     "asado a domicilio melipilla",
     "parrillero santiago",
@@ -34,14 +34,14 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "es_CL",
-    url: "https://sociosdelfuego.cl",
+    url: "https://socios-del-fuego.vercel.app",
     title: "Socios del Fuego | Tu Parrillero Privado",
     description:
       "Llevamos la parrilla y los insumos. Tú solo disfruta. Cobertura en Zona Central.",
     siteName: "Socios del Fuego",
     images: [
       {
-        url: "/og-image.jpg",
+        url: "/og-image.webp",
         width: 1200,
         height: 630,
         alt: "Socios del Fuego Asados",
@@ -68,12 +68,12 @@ export default function RootLayout({
     "@type": "FoodEstablishment",
     name: "Socios del Fuego",
     image: [
-      "https://sociosdelfuego.cl/logo.png",
-      "https://sociosdelfuego.cl/cordero.jpg",
+      "https://socios-del-fuego.vercel.app/logo.webp",
+      "https://socios-del-fuego.vercel.app/cordero.webp",
     ],
-    "@id": "https://sociosdelfuego.cl",
-    url: "https://sociosdelfuego.cl",
-    telephone: "+56997093569",
+    "@id": "https://socios-del-fuego.vercel.app",
+    url: "https://socios-del-fuego.vercel.app",
+    telephone: "+56981641528",
     priceRange: "$$$",
     address: {
       "@type": "PostalAddress",
@@ -109,7 +109,7 @@ export default function RootLayout({
       opens: "09:00",
       closes: "22:00",
     },
-    menu: "https://socios-del-fuego.web.app/?v=cotizar",
+    menu: "https://socios-del-fuego.vercel.app/cotizar",
     acceptsReservations: "True",
   };
 
@@ -119,7 +119,7 @@ export default function RootLayout({
     "@type": "WebSite",
     name: "Socios del Fuego",
     alternateName: ["Asados Socios del Fuego", "SociosDelFuego"],
-    url: "https://sociosdelfuego.cl",
+    url: "https://socios-del-fuego.vercel.app",
   };
 
   return (

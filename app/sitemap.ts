@@ -1,12 +1,21 @@
 import { MetadataRoute } from 'next'
+import { getAllPosts } from '@/lib/blog'
 
-// ESTA LÍNEA ES LA SOLUCIÓN:
 export const dynamic = 'force-static'
 
-const BASE_URL = 'https://sociosdelfuego.cl' 
+const BASE_URL = 'https://socios-del-fuego.vercel.app'
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  return [
+  const posts = getAllPosts()
+
+  const postEntries: MetadataRoute.Sitemap = posts.map((post) => ({
+    url: `${BASE_URL}/blog/${post.slug}`,
+    lastModified: new Date(post.date || Date.now()),
+    changeFrequency: 'monthly',
+    priority: 0.7,
+  }))
+
+  const staticEntries: MetadataRoute.Sitemap = [
     {
       url: BASE_URL,
       lastModified: new Date(),
@@ -26,4 +35,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.8,
     },
   ]
+
+  return [...staticEntries, ...postEntries]
 }

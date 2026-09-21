@@ -183,10 +183,10 @@ export default function CotizadorPage() {
           </div>
         )}
 
-        {loading || isAuthLoading ? (
+        {(typeof window !== "undefined" && new URLSearchParams(window.location.search).has("quote") && isAuthLoading) ? (
           <div className="flex flex-col items-center justify-center py-20 space-y-4 animate-pulse">
             <div className="w-12 h-12 border-4 border-stone-800 border-t-orange-500 rounded-full animate-spin"></div>
-            <p className="text-stone-500 text-sm">Cargando...</p>
+            <p className="text-stone-500 text-sm">Cargando cotización...</p>
           </div>
         ) : (
           <>

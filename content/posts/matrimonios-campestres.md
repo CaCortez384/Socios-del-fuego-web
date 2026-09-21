@@ -32,4 +32,4 @@ Para estas ocasiones, diseñamos la experiencia definitiva. No solo incluye el *
 > **Consejo de Experto:** Si tu boda es de día, el asado es la opción ganadora. Aprovecha la luz natural para las fotos con el fuego de fondo.
 
 ### ¿Listo para sorprender?
-Cotiza aquí tu fecha para Enero o Febrero y asegura el fuego para tu gran día.
+[Cotiza aquí](/cotizar) tu fecha y asegura el fuego para tu gran día.

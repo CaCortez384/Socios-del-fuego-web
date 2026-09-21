@@ -51,7 +51,7 @@ export default async function BlogPost({ params }: { params: { slug: string } })
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     "headline": post.title,
-    "image": "https://sociosdelfuego.cl/og-image.jpg",
+    "image": "https://socios-del-fuego.vercel.app/og-image.webp",
     "author": {
       "@type": "Organization",
       "name": "Socios del Fuego"
@@ -101,7 +101,7 @@ export default async function BlogPost({ params }: { params: { slug: string } })
         <div className="mt-16 p-8 bg-stone-900 border border-stone-800 rounded-xl text-center">
             <h3 className="font-oswald text-2xl text-white mb-2">¿Te dio hambre leer esto?</h3>
             <p className="text-stone-400 mb-6">Deja que nosotros nos encarguemos del fuego en tu próximo evento.</p>
-            <Link href="/" className="bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 px-8 rounded-lg inline-block transition-colors">
+            <Link href="/cotizar" className="bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 px-8 rounded-lg inline-block transition-colors">
                 Cotizar un Asado
             </Link>
         </div>
