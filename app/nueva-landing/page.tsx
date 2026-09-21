@@ -253,58 +253,6 @@ export default function NuevaLandingPage() {
           </div>
         </section>
 
-        {/* 3. ESTIMADOR RÁPIDO / CALCULADORA EXPRESS */}
-        <section className="py-12 bg-gradient-to-b from-stone-900 to-stone-950 border-b border-stone-800">
-          <div className="container mx-auto px-4 max-w-4xl">
-            <div className="bg-stone-900/90 border border-orange-500/20 rounded-2xl p-6 md:p-8 shadow-2xl backdrop-blur-sm">
-              <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-                <div className="text-center md:text-left">
-                  <span className="text-xs uppercase font-oswald tracking-widest text-orange-400 font-bold">
-                    Calculadora Estimada
-                  </span>
-                  <h3 className="font-oswald text-2xl md:text-3xl font-bold text-white mt-1">
-                    ¿Cuántas personas asistirán a tu asado?
-                  </h3>
-                  <p className="text-stone-400 text-sm mt-1">
-                    Ajusta el número de invitados para tener una referencia inmediata de inversión.
-                  </p>
-                </div>
-
-                <div className="w-full md:w-auto flex flex-col sm:flex-row items-center gap-4">
-                  <div className="flex items-center gap-3 bg-stone-950 border border-stone-800 px-4 py-2.5 rounded-xl">
-                    <Users className="w-5 h-5 text-orange-500" />
-                    <input
-                      type="range"
-                      min="15"
-                      max="150"
-                      step="5"
-                      value={guestCount}
-                      onChange={(e) => setGuestCount(Number(e.target.value))}
-                      className="accent-orange-500 cursor-pointer w-32"
-                    />
-                    <span className="font-oswald text-xl font-bold text-white min-w-[3ch] text-center">
-                      {guestCount}
-                    </span>
-                    <span className="text-xs text-stone-500">invitados</span>
-                  </div>
-
-                  <div className="text-center sm:text-right min-w-[150px]">
-                    <div className="text-xs text-stone-400 uppercase tracking-wide">Inversión referencial</div>
-                    <div className="font-oswald text-2xl font-bold text-orange-400">
-                      ${new Intl.NumberFormat("es-CL").format(estimatedTotal)}
-                    </div>
-                  </div>
-
-                  <Button asChild className="bg-orange-600 hover:bg-orange-500 text-white font-oswald uppercase tracking-wider px-6 py-5">
-                    <Link href={`/cotizar`}>
-                      Personalizar
-                    </Link>
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
 
         {/* 4. TRES PASOS SENCILLOS */}
         <section className="py-20 bg-stone-950 border-b border-stone-800">
@@ -620,6 +568,61 @@ export default function NuevaLandingPage() {
                   </div>
                 </div>
               ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ESTIMADOR RÁPIDO / CALCULADORA EXPRESS */}
+        <section className="py-16 bg-gradient-to-b from-stone-900 to-stone-950 border-b border-stone-800">
+          <div className="container mx-auto px-4 max-w-4xl">
+            <div className="bg-stone-900/90 border border-orange-500/25 rounded-3xl p-8 md:p-10 shadow-2xl backdrop-blur-sm relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-48 h-48 bg-orange-600/10 rounded-full blur-3xl pointer-events-none" />
+              
+              <div className="flex flex-col md:flex-row items-center justify-between gap-8 relative z-10">
+                <div className="text-center md:text-left">
+                  <span className="text-xs uppercase font-oswald tracking-widest text-orange-400 font-bold">
+                    Estimador Express
+                  </span>
+                  <h3 className="font-oswald text-2xl md:text-4xl font-bold text-white mt-1 uppercase">
+                    ¿Cuántos invitados esperas?
+                  </h3>
+                  <p className="text-stone-400 text-sm mt-2 max-w-md">
+                    Calcula una inversión referencial basada en nuestro plan más popular. Puedes personalizar carnes, ensaladas y adicionales en el cotizador.
+                  </p>
+                </div>
+
+                <div className="w-full md:w-auto flex flex-col sm:flex-row items-center gap-4">
+                  <div className="flex items-center gap-3 bg-stone-950 border border-stone-800 px-5 py-3 rounded-2xl">
+                    <Users className="w-5 h-5 text-orange-500 shrink-0" />
+                    <input
+                      type="range"
+                      min="15"
+                      max="150"
+                      step="5"
+                      value={guestCount}
+                      onChange={(e) => setGuestCount(Number(e.target.value))}
+                      className="accent-orange-500 cursor-pointer w-28 md:w-36"
+                    />
+                    <span className="font-oswald text-2xl font-bold text-white min-w-[3ch] text-center">
+                      {guestCount}
+                    </span>
+                    <span className="text-xs text-stone-500">invitados</span>
+                  </div>
+
+                  <div className="text-center sm:text-right min-w-[150px]">
+                    <div className="text-xs text-stone-400 uppercase tracking-wide">Inversión referencial</div>
+                    <div className="font-oswald text-2xl md:text-3xl font-bold text-orange-400">
+                      ${new Intl.NumberFormat("es-CL").format(estimatedTotal)}
+                    </div>
+                  </div>
+
+                  <Button asChild className="bg-orange-600 hover:bg-orange-500 text-white font-oswald uppercase tracking-wider px-6 py-6 text-sm font-bold shadow-[0_0_20px_rgba(234,88,12,0.3)]">
+                    <Link href={`/cotizar`}>
+                      Cotizar Ahora
+                    </Link>
+                  </Button>
+                </div>
+              </div>
             </div>
           </div>
         </section>
