@@ -68,7 +68,7 @@ const SERVICE_PILLARS = [
 const FAQS = [
   {
     q: "¿Qué incluye exactamente el servicio y cuánto dura?",
-    a: "Llevamos todo lo necesario para el asado: maestros parrilleros (1 cada 30-40 personas), garzones (si eliges el plan con servicio a la mesa), carbón de espino o leña, y parrillas móviles sin costo adicional. La duración del servicio gastronómico es de 3 a 4 horas aproximadamente. Al finalizar, dejamos el área de trabajo y limpieza impecable.",
+    a: "Llevamos todo lo necesario para el asado: 2 maestros parrilleros, garzones (si eliges el plan con servicio a la mesa), carbón de espino o leña, y parrillas móviles sin costo adicional. La duración del servicio gastronómico es de 3 a 4 horas aproximadamente. Al finalizar, dejamos el área de trabajo y limpieza impecable.",
   },
   {
     q: "¿Ofrecen vajilla y mobiliario para los invitados?",
@@ -329,11 +329,10 @@ export default function NuevaLandingPage() {
               <button
                 key={cat.id}
                 onClick={() => setActiveCategory(cat.id)}
-                className={`px-6 py-2.5 rounded-full font-oswald uppercase tracking-wider text-sm transition-all duration-300 ${
-                  activeCategory === cat.id
+                className={`px-6 py-2.5 rounded-full font-oswald uppercase tracking-wider text-sm transition-all duration-300 ${activeCategory === cat.id
                     ? "bg-gradient-to-r from-orange-600 to-amber-600 text-white shadow-[0_0_20px_rgba(234,88,12,0.4)] scale-105 font-bold"
                     : "bg-stone-900/80 text-stone-400 border border-stone-800 hover:border-orange-500/50 hover:text-orange-400"
-                }`}
+                  }`}
               >
                 {cat.label}
               </button>
@@ -365,11 +364,10 @@ export default function NuevaLandingPage() {
               PLANS.filter((p) => p.category === activeCategory && p.active !== false).map((plan) => (
                 <Card
                   key={plan.id}
-                  className={`bg-stone-900/80 border-stone-800 flex flex-col relative rounded-2xl overflow-hidden transition-all duration-300 hover:border-stone-600 hover:shadow-2xl ${
-                    plan.recommended
+                  className={`bg-stone-900/80 border-stone-800 flex flex-col relative rounded-2xl overflow-hidden transition-all duration-300 hover:border-stone-600 hover:shadow-2xl ${plan.recommended
                       ? "border-orange-500/70 shadow-[0_0_30px_rgba(234,88,12,0.2)] bg-gradient-to-b from-stone-900 to-stone-950"
                       : ""
-                  }`}
+                    }`}
                 >
                   {plan.recommended && (
                     <div className="bg-gradient-to-r from-orange-600 to-amber-600 text-white text-xs font-oswald uppercase tracking-widest font-bold py-1.5 text-center shadow-md">
@@ -512,9 +510,8 @@ export default function NuevaLandingPage() {
               {GALLERY_IMAGES.map((img, i) => (
                 <div
                   key={i}
-                  className={`group relative rounded-2xl overflow-hidden border border-stone-800 bg-stone-900 shadow-xl ${
-                    i === 0 ? "md:col-span-2 md:row-span-2 h-72 md:h-full min-h-[300px]" : "h-56 md:h-64"
-                  }`}
+                  className={`group relative rounded-2xl overflow-hidden border border-stone-800 bg-stone-900 shadow-xl ${i === 0 ? "md:col-span-2 md:row-span-2 h-72 md:h-full min-h-[300px]" : "h-56 md:h-64"
+                    }`}
                 >
                   <Image
                     src={img.src}
@@ -577,7 +574,7 @@ export default function NuevaLandingPage() {
           <div className="container mx-auto px-4 max-w-4xl">
             <div className="bg-stone-900/90 border border-orange-500/25 rounded-3xl p-8 md:p-10 shadow-2xl backdrop-blur-sm relative overflow-hidden">
               <div className="absolute top-0 right-0 w-48 h-48 bg-orange-600/10 rounded-full blur-3xl pointer-events-none" />
-              
+
               <div className="flex flex-col md:flex-row items-center justify-between gap-8 relative z-10">
                 <div className="text-center md:text-left">
                   <span className="text-xs uppercase font-oswald tracking-widest text-orange-400 font-bold">
