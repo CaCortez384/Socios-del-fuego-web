@@ -40,7 +40,7 @@ const formattedMinPrice = new Intl.NumberFormat("es-CL").format(minPrice);
 const COTIZAR_URL = "/cotizar";
 
 const GALLERY_IMAGES = [
-  { src: "/galeria/parrilla1.jpeg", title: "Cortes Angus a Punto", desc: "Sellado perfecto y temperatura controlada" },
+  { src: "/galeria/parrilla1.jpeg", title: "Cortes Premium a Punto", desc: "Sellado perfecto y temperatura controlada" },
   { src: "/galeria/parrilla4.jpeg", title: "Tablas de Picoteo", desc: "Longanizas artesanales y malaya crujiente" },
   { src: "/galeria/parrilla3.jpeg", title: "Servicio en Vivo", desc: "Maestros parrilleros atendiendo en tu parcela" },
   { src: "/galeria/parrilla2.jpeg", title: "Parrillada al Fuego", desc: "Carbón de espino y leña seleccionada" },
@@ -54,33 +54,33 @@ const SERVICE_PILLARS = [
     desc: "Llegamos con 2 a 3 horas de anticipación. Llevamos nuestras propias parrillas, carbón de espino y herramientas. No necesitas prestarnos nada ni preocuparte por el encendido del fuego.",
   },
   {
-    title: "Cortes Angus & Libre Pastoreo",
+    title: "Cortes Premium & Libre Pastoreo",
     tag: "Calidad Seleccionada",
     desc: "Solo trabajamos con Lomo Vetado, Punta de Ganso y Corderos seleccionados. Manejamos tiempos de reposo y cocción exacta para que cada corte se sirva tierno y en su punto.",
   },
   {
     title: "Tú Eres un Invitado Más",
     tag: "Disfruta al 100%",
-    desc: "Olvídate de estar amarrado a la parrilla, con olor a humo en tu ropa o preocupado de que falte comida. Nuestro equipo se encarga de servir y dejar el área de trabajo impecable.",
+    desc: "Olvídate de estar amarrado a la parrilla. Nuestro equipo de parrilleros y garzones se encarga de servir, y si lo deseas, montamos el mobiliario completo (mesas, vajilla y sillas) dejando todo impecable.",
   },
 ];
 
 const FAQS = [
   {
-    q: "¿Qué incluye exactamente el servicio de Socios del Fuego?",
-    a: "Llevamos todo lo necesario para el asado: maestros parrilleros dedicados, carbón vegetal de espino, carnes premium seleccionadas, guarniciones y ensaladas según tu plan. Si no tienes quincho o parrilla, nosotros llevamos nuestras parrillas móviles sin costo adicional.",
+    q: "¿Qué incluye exactamente el servicio y cuánto dura?",
+    a: "Llevamos todo lo necesario para el asado: maestros parrilleros (1 cada 30-40 personas), garzones (si eliges el plan con servicio a la mesa), carbón de espino o leña, y parrillas móviles sin costo adicional. La duración del servicio gastronómico es de 3 a 4 horas aproximadamente. Al finalizar, dejamos el área de trabajo y limpieza impecable.",
+  },
+  {
+    q: "¿Ofrecen vajilla y mobiliario para los invitados?",
+    a: "¡Sí! Ofrecemos servicio de Mobiliario Completo como opcional. Esto incluye: mesas, sillas, mantelería, vajilla, cristalería y el montaje completo para que no tengas que preocuparte de nada en tu parcela o centro de eventos.",
+  },
+  {
+    q: "¿Cómo se calcula el costo de traslado?",
+    a: "Llegamos con todo nuestro equipo a tu ubicación. El costo de traslado se calcula de manera exacta y transparente en nuestro cotizador online, dependiendo de tu comuna (abarcamos Región Metropolitana, V y VI Región).",
   },
   {
     q: "¿Con cuánta anticipación debo reservar mi fecha?",
     a: "Para fines de semana de temporada alta (septiembre a marzo), recomendamos reservar con 2 a 4 semanas de anticipación transfiriendo el 50% para congelar la fecha en agenda. Para días de semana o eventos corporativos, con 7 a 10 días suele ser suficiente.",
-  },
-  {
-    q: "¿Emiten factura para eventos de empresa?",
-    a: "Sí, emitimos Factura Electrónica exenta/afecta según requerimiento contable para empresas e instituciones en toda la Región Metropolitana, V y VI Región.",
-  },
-  {
-    q: "¿Qué pasa si las condiciones climáticas o el lugar son complicados?",
-    a: "Nos adaptamos tanto a jardines abiertos como a terrazas de departamentos amplios o parcelas rurales. Contamos con carpas parrilleras ignífugas si hubiera llovizna o viento moderado.",
   },
   {
     q: "¿Qué pasa si sobran carnes al terminar el evento?",
@@ -200,7 +200,7 @@ export default function NuevaLandingPage() {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="text-lg md:text-2xl text-stone-300 font-light max-w-3xl mx-auto mb-10 leading-relaxed"
             >
-              Llevamos maestros parrilleros, carbón de espino, cortes Angus seleccionados y el tradicional <span className="text-orange-400 font-medium">Cordero al Palo</span> directamente a tu parcela o terraza.
+              Llevamos maestros parrilleros, carbón de espino, cortes premium seleccionados y el tradicional <span className="text-orange-400 font-medium">Cordero al Palo</span> directamente a tu parcela o terraza.
             </motion.p>
 
             {/* CTAs Principales */}
@@ -239,7 +239,7 @@ export default function NuevaLandingPage() {
               </div>
               <div className="flex items-center justify-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-orange-500 shrink-0" />
-                <span>Solo cortes Angus & Corderos libres</span>
+                <span>Solo cortes Premium & Corderos libres</span>
               </div>
               <div className="flex items-center justify-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-orange-500 shrink-0" />
