@@ -99,17 +99,7 @@ export default function NuevaLandingPage() {
 
   return (
     <div className="min-h-screen bg-stone-950 font-sans text-stone-100 selection:bg-orange-500 selection:text-white">
-      {/* 0. BANNER DE COMPARACIÓN DE DISEÑO */}
-      <div className="bg-gradient-to-r from-orange-600 via-amber-600 to-orange-700 py-2 px-4 text-center text-xs md:text-sm font-semibold text-white shadow-md flex items-center justify-center gap-3">
-        <span className="flex items-center gap-1.5">
-          <Sparkles className="w-4 h-4 text-yellow-300 animate-spin" style={{ animationDuration: "4s" }} />
-          <span>Propuesta de Rediseño 2026</span>
-        </span>
-        <span className="hidden md:inline text-orange-200">|</span>
-        <Link href="/" className="underline hover:text-stone-950 transition-colors bg-black/20 px-2.5 py-0.5 rounded-full">
-          Ver diseño anterior
-        </Link>
-      </div>
+
 
       {/* 1. NAVBAR ELEGANTE */}
       <nav className="sticky top-0 z-50 w-full border-b border-stone-800/80 bg-stone-950/85 backdrop-blur-xl transition-all">
